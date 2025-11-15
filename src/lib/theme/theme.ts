@@ -1,8 +1,10 @@
 import { createTheme } from '@mui/material';
 
+export const flexCol = { display: 'flex', flexDirection: 'column' };
 export const palette = {
   mode: 'light',
-  primaryMain: '#2449C3',
+  background: '#F6F7F8',
+  primaryMain: '#1976D2',
   secondaryMain: '#F8E912',
   secondaryContrastText: '#455A64',
   textPrimary: '#37474F',
@@ -14,6 +16,7 @@ export const palette = {
 
 export const theme = createTheme({
   palette: {
+    background: { default: palette.background },
     primary: {
       main: palette.primaryMain,
     },

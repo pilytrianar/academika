@@ -66,6 +66,38 @@ Esto asegura que el código quede limpio y consistente antes de subirlo.
 
 ---
 
+# 🗄️ Configuración de la Base de Datos
+
+### 1. Configurar variables de entorno
+
+Copia el archivo `.env.example` a `.env` y agrega la cadena de conexión de MySQL:
+
+```bash
+DATABASE_URL="mysql://usuario:contraseña@localhost:3306/academika"
+```
+
+Reemplaza:
+
+- `usuario`: Tu usuario de MySQL
+- `contraseña`: Tu contraseña de MySQL
+- `localhost`: Host del servidor (si está local)
+- `3306`: Puerto de MySQL (por defecto 3306)
+- `academika`: Nombre de la base de datos
+
+### 2. Ejecutar migraciones de Prisma
+
+Para crear las tablas en la base de datos:
+
+```bash
+pnpm db:migrate
+```
+
+### 3. Insertar datos de prueba (Login)
+
+Debes insertar al menos un usuario con contraseña hasheada (bcrypt con 10 rounds) para probar la funcionalidad de login. Inserta manualmente en la tabla `users` con contraseña hasheada usando bcrypt mientras el modulo Registro está disponible.
+
+---
+
 # 🗂️ Estructura del proyecto
 
 ```txt
