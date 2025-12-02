@@ -54,6 +54,22 @@ http://localhost:3000
 
 ---
 
+# 📚 Storybook
+
+Para iniciar Storybook:
+
+```bash
+pnpm storybook
+```
+
+La aplicación estará disponible en:
+
+```
+http://localhost:6006
+```
+
+---
+
 # 🧹 Antes de enviar cambios (OBLIGATORIO)
 
 Siempre ejecuta:
