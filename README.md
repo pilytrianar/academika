@@ -70,6 +70,38 @@ http://localhost:6006
 
 ---
 
+# 🧪 Testing
+
+Para iniciar Testing y correr todos los tests:
+
+```bash
+pnpm test
+```
+
+Para iniciar test por archivo:
+
+```bash
+pnpm test:watch --nombre-del-archivo
+```
+
+**Ejemplo:**
+
+```bash
+pnpm test:watch Avatar
+```
+
+Para visualizar la cobertura de los tests:
+
+```bash
+pnpm test:coverage
+```
+
+> nota: Este comando creara un nuevo folder en la raíz del proyecto llamado `coverage`
+
+Abra en el navegador el archivo `index.html` dentro de la carpeta `coverage`
+
+---
+
 # 🧹 Antes de enviar cambios (OBLIGATORIO)
 
 Siempre ejecuta:
