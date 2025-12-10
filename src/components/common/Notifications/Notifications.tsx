@@ -7,19 +7,7 @@ import DoneAllIcon from '@mui/icons-material/DoneAll';
 import DeleteSweepIcon from '@mui/icons-material/DeleteSweepOutlined';
 import NotificationItem from './NotificationsItems';
 import DropDownMenu from '../DropDownMenu';
-
-interface Notification {
-  id: string;
-  title: string;
-  description: string;
-  time: string;
-  type: 'info' | 'success' | 'warning' | 'error';
-  read: boolean;
-}
-
-interface NotificationsProps {
-  data: Notification[];
-}
+import { Notification, NotificationsProps } from './Notifications.types';
 
 const Notifications = ({ data }: NotificationsProps) => {
   const [notifications, setNotifications] = useState<Notification[]>(data);

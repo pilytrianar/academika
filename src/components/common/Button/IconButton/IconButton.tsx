@@ -1,12 +1,5 @@
 import { Box, IconButton as MuiIconButton, Typography } from '@mui/material';
-import { IconButtonProps as MuiIconButtonProps } from '@mui/material';
-
-interface IconButtonProps extends MuiIconButtonProps {
-  children?: React.ReactNode;
-  onClick?: (event: React.MouseEvent<HTMLElement>) => void;
-  hasText?: boolean;
-  text?: string;
-}
+import { IconButtonProps } from './IconButton.types';
 
 const IconButton = ({ children, hasText, onClick, text, ...props }: IconButtonProps) => {
   return (

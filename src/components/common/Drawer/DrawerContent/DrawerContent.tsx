@@ -11,18 +11,7 @@ import {
 } from '@mui/material';
 
 import Image from 'next/image';
-
-interface MenuItem {
-  text: string;
-  icon: React.ReactNode;
-  path: string;
-}
-
-interface DrawerContentProps {
-  menuItems: MenuItem[];
-  pathname: string;
-  handleNavigation?: (path: string) => void;
-}
+import { DrawerContentProps } from './DrawerContent.types';
 
 const DrawerContent = ({ menuItems, pathname, handleNavigation }: DrawerContentProps) => {
   return (

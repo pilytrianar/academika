@@ -2,12 +2,7 @@ import { Card as MuiCard, Typography } from '@mui/material';
 import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import Button from '../Button';
-
-interface CardProps {
-  title: string;
-  description: string;
-  onClick?: () => void;
-}
+import { CardProps } from './Card.types';
 
 const Card = ({ title = 'Title', description = 'Description', onClick }: CardProps) => {
   return (

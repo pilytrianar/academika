@@ -3,17 +3,7 @@ import { AccountCircle } from '@mui/icons-material';
 import DropDownMenu from '../DropDownMenu';
 import IconButton from '../Button/IconButton';
 import { parseCaseText } from '@/utils/helpers.common';
-
-interface AvatarMenuProps {
-  id: number;
-  text: string;
-  onClick?: () => void;
-}
-
-interface AvatarProps {
-  data: AvatarMenuProps[];
-  user?: string;
-}
+import { AvatarProps } from './Avatar.types';
 
 const Avatar = ({ data, user }: AvatarProps) => {
   const theme = useTheme();
