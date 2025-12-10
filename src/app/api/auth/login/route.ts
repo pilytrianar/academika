@@ -3,7 +3,7 @@ import { isError } from '@/utils/helpers.common';
 import { API_MESSAGES } from '@/utils/constants';
 import { validateInput } from '@/lib/validation';
 import { loginSchema } from '@/lib/schemas';
-//import { login } from '@/server/auth/login/login.service';
+import { login } from '@/server/auth/login/login.service';
 
 export async function POST(req: Request) {
   const body = await req.json();
