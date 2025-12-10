@@ -43,7 +43,9 @@ export const mockMaterialComponents = () => {
           {children}
         </li>
       ),
-      Typography: ({ children, textAlign, ...props }: TypographyProps) => <span {...props}>{children}</span>,
+      Typography: ({ children, textAlign, ...props }: TypographyProps) => (
+        <span {...props}>{children}</span>
+      ),
     };
   });
 };
