@@ -1,18 +1,6 @@
 import { Typography } from '@mui/material';
 import Image from 'next/image';
-
-const ImageBadgeTypes = {
-  accion: '/img/accion.svg',
-  recordatorio: '/img/recordatorio.svg',
-};
-
-type ImageBadgeType = keyof typeof ImageBadgeTypes;
-
-export interface ActivityItemProps {
-  imageBadge: ImageBadgeType;
-  title: string;
-  description: string;
-}
+import { ActivityItemProps, ImageBadgeTypes } from './ActivityItem.types';
 
 const ActivityItem = ({ title, description, imageBadge }: ActivityItemProps) => {
   const src = ImageBadgeTypes[imageBadge];

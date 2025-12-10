@@ -2,21 +2,7 @@ import Image from 'next/image';
 import Button from '../Button';
 import { ArrowForward } from '@mui/icons-material';
 import { Typography } from '@mui/material';
-
-const ImageTypes = {
-  asignaturas: '/img/asignaturas.svg',
-  estudiantes: '/img/estudiantes.svg',
-};
-
-type ImageType = keyof typeof ImageTypes;
-
-interface NavigationCardProps {
-  image: ImageType;
-  title: string;
-  description: string;
-  btnText: string;
-  onClick: () => void;
-}
+import { NavigationCardProps, ImageTypes } from './NavigationCard.types';
 
 const NavigationCard = ({ image, title, description, btnText, onClick }: NavigationCardProps) => {
   const src = ImageTypes[image];

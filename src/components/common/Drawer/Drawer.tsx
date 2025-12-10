@@ -1,22 +1,11 @@
 import { Drawer as MuiDrawer } from '@mui/material';
-import { DrawerProps as MuiDrawerProps } from '@mui/material';
-import DrawerContent from './DrawerContent.tsx';
+import DrawerContent from './DrawerContent';
 import HomeIcon from '@mui/icons-material/Home';
 import BookIcon from '@mui/icons-material/Book';
 import PeopleIcon from '@mui/icons-material/People';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import { usePathname } from 'next/navigation.js';
-
-interface DrawerProps extends MuiDrawerProps {
-  isMobile?: boolean;
-  handleNavigation?: (path: string) => void;
-}
-
-interface MenuItem {
-  text: string;
-  icon: React.ReactNode;
-  path: string;
-}
+import { DrawerProps, MenuItem } from './Drawer.types';
 
 const menuItems: MenuItem[] = [
   { text: 'Inicio', icon: <HomeIcon />, path: '/dashboard' },

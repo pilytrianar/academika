@@ -1,11 +1,6 @@
-import { Menu, MenuProps } from '@mui/material';
-import { ReactNode } from 'react';
+import { Menu } from '@mui/material';
 import { useMenu } from '../../hooks/useMenu';
-
-interface DropDownMenuProps extends Omit<MenuProps, 'open' | 'onClose' | 'anchorEl'> {
-  children: ReactNode;
-  trigger: (handleOpen: (event: React.MouseEvent<HTMLElement>) => void) => ReactNode;
-}
+import { DropDownMenuProps } from './DropDownMenu.types';
 
 const DropDownMenu = ({ children, trigger, ...props }: DropDownMenuProps) => {
   const { anchorEl, handleOpen, handleClose } = useMenu();

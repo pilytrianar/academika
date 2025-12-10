@@ -1,14 +1,5 @@
-import { Button as MuiButton, ButtonProps as MuiButtonProps, SxProps, Theme } from '@mui/material';
-import { ReactNode } from 'react';
-
-export interface ButtonProps extends Omit<MuiButtonProps, 'children'> {
-  text: string;
-  textUpperCase?: boolean;
-  startIcon?: ReactNode;
-  endIcon?: ReactNode;
-  rounded?: string;
-  fontWeight?: string;
-}
+import { Button as MuiButton, SxProps, Theme } from '@mui/material';
+import { ButtonProps } from './Button.types';
 
 const Button = ({
   text,

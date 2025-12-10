@@ -14,22 +14,7 @@ import WarningIcon from '@mui/icons-material/WarningAmber';
 import ErrorIcon from '@mui/icons-material/ErrorOutline';
 import InfoIcon from '@mui/icons-material/InfoOutlined';
 
-import { Theme } from '@mui/material/styles';
-
-interface Notification {
-  id: string;
-  title: string;
-  description: string;
-  time: string;
-  type: 'info' | 'success' | 'warning' | 'error';
-  read: boolean;
-}
-
-interface NotificationItemProps {
-  notification: Notification;
-  isLast: boolean;
-  theme: Theme;
-}
+import { NotificationItemProps, NotificationItem as Notification } from './NotificationItems.types';
 
 const getNotificationIcon = (type: Notification['type']) => {
   const iconProps = { fontSize: 'small' as const };
