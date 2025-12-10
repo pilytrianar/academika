@@ -33,10 +33,10 @@ describe('Componente Drawer', () => {
   describe('Renderizado', () => {
     it('renderiza el componente Drawer', () => {
       const { container } = render(<Drawer handleNavigation={mockHandleNavigation} />);
-      
+
       const drawer = container.querySelector('.MuiDrawer-root');
       expect(drawer).toBeInTheDocument();
-      
+
       const drawerContent = screen.getByTestId('drawer-content');
       expect(drawerContent).toBeInTheDocument();
     });
@@ -91,10 +91,10 @@ describe('Componente Drawer', () => {
 
     it('funciona sin la propiedad handleNavigation', () => {
       const { container } = render(<Drawer />);
-      
+
       const drawer = container.querySelector('.MuiDrawer-root');
       expect(drawer).toBeInTheDocument();
-      
+
       const drawerContent = screen.getByTestId('drawer-content');
       expect(drawerContent).toBeInTheDocument();
     });
