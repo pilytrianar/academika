@@ -1,4 +1,4 @@
-/*import bcrypt from 'bcrypt';
+import bcrypt from 'bcrypt';
 import { User } from '@/generated/prisma/client';
 import { prisma } from '@/server';
 import { API_MESSAGES } from '@/utils/constants';
@@ -13,4 +13,4 @@ export async function login(email: User['email'], password: User['password']) {
   const { password: _, ...safeUser } = user;
 
   return safeUser;
-}*/
+}
