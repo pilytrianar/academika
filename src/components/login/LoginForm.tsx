@@ -1,9 +1,9 @@
+'use client';
+
 import { useRouter } from 'next/navigation';
 import { Field, Form, Formik } from 'formik';
-import { useState } from 'react';
-import { Alert, Checkbox, FormControlLabel, Grid } from '@mui/material';
-
-import Button from '@/components/common/Button';
+import { CSSProperties, useState } from 'react';
+import { Alert, Button, Checkbox, FormControlLabel, Grid } from '@mui/material';
 
 import ErrorText from '@/components/common/ErrorText';
 import EmailField from '@/components/common/EmailField';
@@ -12,6 +12,11 @@ import PasswordField from '@/components/common/PasswordField';
 import { loginSchema } from '@/lib/schemas';
 import { API_MESSAGES, basePostReq } from '@/utils/constants';
 import { HandleSubmitProps, LoginValues } from '@/types/auth';
+
+const styles = {
+  submitBtn: { borderRadius: 3, fontWeight: 600, textTransform: 'none' },
+  form: { display: 'flex', flexDirection: 'column', gap: 20 } as CSSProperties,
+};
 
 const handleSubmit = async (props: HandleSubmitProps) => {
   const { values, router, setError, setLoading } = props;
@@ -39,7 +44,7 @@ export default function LoginForm() {
       onSubmit={async values => await handleSubmit({ values, setLoading, setError, router })}
     >
       {({ errors, touched }) => (
-        <Form className='flex flex-col gap-20'>
+        <Form style={styles.form}>
           <Grid container spacing={2}>
             <Grid size={12}>
               <Field name='email' disabled={loading} as={EmailField} />
@@ -54,7 +59,9 @@ export default function LoginForm() {
             </Grid>
           </Grid>
           {error && <Alert severity='error'>{error}</Alert>}
-          <Button text='Acceder' disabled={loading} type='submit' rounded='0.5rem' />
+          <Button type='submit' loading={loading} sx={styles.submitBtn} variant='contained'>
+            Acceder
+          </Button>
         </Form>
       )}
     </Formik>
