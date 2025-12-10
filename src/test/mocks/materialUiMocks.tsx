@@ -30,6 +30,7 @@ export const mockMaterialComponents = () => {
         onClose,
         anchorOrigin,
         keepMounted,
+        slotProps,
         ...props
       }: MenuProps) =>
         open ? (
@@ -37,12 +38,12 @@ export const mockMaterialComponents = () => {
             {children}
           </div>
         ) : null,
-      MenuItem: ({ children, onClick, ...props }: MenuItemProps) => (
+      MenuItem: ({ children, dense, divider, onClick, ...props }: MenuItemProps) => (
         <li role='menuitem' onClick={onClick} {...props}>
           {children}
         </li>
       ),
-      Typography: ({ children, ...props }: TypographyProps) => <span {...props}>{children}</span>,
+      Typography: ({ children, textAlign, ...props }: TypographyProps) => <span {...props}>{children}</span>,
     };
   });
 };

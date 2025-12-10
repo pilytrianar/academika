@@ -1,11 +1,10 @@
 import { render, screen, fireEvent } from '@testing-library/react';
-import { describe, it, expect, vi } from 'vitest';
+import { describe, it, expect } from 'vitest';
+import { mockVisibilityIcons } from '@/test/mocks';
 import PasswordField from './PasswordField';
 
-vi.mock('@mui/icons-material', () => ({
-  Visibility: () => <div data-testid='visibility-icon'>Visibility</div>,
-  VisibilityOff: () => <div data-testid='visibility-off-icon'>VisibilityOff</div>,
-}));
+// Mock de Material-UI
+mockVisibilityIcons();
 
 describe('Componente PasswordField', () => {
   it('Se renderiza correctamente', () => {

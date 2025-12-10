@@ -2,8 +2,8 @@ import { render, screen } from '@testing-library/react';
 import { describe, it, expect } from 'vitest';
 import ErrorText from './ErrorText';
 
-describe('ErrorText Component', () => {
-  it('renders error message when touched and error exists', () => {
+describe('Componente ErrorText', () => {
+  it('renderiza el mensaje de error cuando el campo ha sido tocado y hay un error', () => {
     const props = {
       name: 'email',
       touched: { email: true },
@@ -13,7 +13,7 @@ describe('ErrorText Component', () => {
     expect(screen.getByText('Invalid email')).toBeInTheDocument();
   });
 
-  it('does not render when not touched', () => {
+  it('no renderiza nada cuando el campo no ha sido tocado', () => {
     const props = {
       name: 'email',
       touched: { email: false },
@@ -23,7 +23,7 @@ describe('ErrorText Component', () => {
     expect(container).toBeEmptyDOMElement();
   });
 
-  it('does not render when there is no error', () => {
+  it('no renderiza nada cuando no hay un error', () => {
     const props = {
       name: 'email',
       touched: { email: true },

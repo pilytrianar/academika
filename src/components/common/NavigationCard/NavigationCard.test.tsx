@@ -1,11 +1,10 @@
 import { render, screen, fireEvent } from '@testing-library/react';
 import { describe, it, expect, vi } from 'vitest';
+import { mockArrowForwardIcon } from '@/test/mocks';
 import NavigationCard from './NavigationCard';
 
-// Mock MUI icons
-vi.mock('@mui/icons-material', () => ({
-  ArrowForward: () => <div data-testid='arrow-forward-icon'>→</div>,
-}));
+// Mock de Material-UI
+mockArrowForwardIcon();
 
 describe('Componente NavigationCard', () => {
   it('Se renderiza correctamente', () => {
