@@ -2,7 +2,6 @@
 import React, { useState } from "react";
 import BarOptions from "@/components/barOptions/barOptions";
 import StudentsTable from "@/components/studentsTable/studentsTable";
-import TopBar from "@/components/topBar/TopBar";
 
 export default function StudentsListWrapper() {
   const [q, setQ] = useState("");
@@ -10,7 +9,7 @@ export default function StudentsListWrapper() {
   return (
     
     <div className="min-h-screen bg-gray-50">
-      <TopBar/>
+
       <div className="max-w-6xl mx-auto mt-5">
         <BarOptions
           onSearch={(v) => setQ(v)}

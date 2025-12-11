@@ -18,6 +18,7 @@ import FormControl from "@mui/material/FormControl";
 import StatusChip from "../statusChip/statusChip";
 import Pagination from "@mui/material/Pagination";
 import Stack from "@mui/material/Stack";
+import Link from "next/link";
 
 type Student = {
   id: string;
@@ -87,8 +88,20 @@ export default function StudentsTable({ search = "" }: Props) {
           <TableBody>
             {currentRows.map((row) => (
               <TableRow key={row.id}>
-                <TableCell>{row.name}</TableCell>
-                <TableCell>{row.id}</TableCell>
+                <TableCell>
+                  <Link
+                    href={`/studentinfo?id=${row.id}`}
+                    className=" hover:text-blue-600"
+                  >
+                    {row.name}
+                  </Link>
+                </TableCell>
+                <TableCell><Link
+                  href={`/studentinfo?id=${row.id}`}
+                  className=" hover:text-blue-600"
+                >
+                  {row.id}
+                </Link></TableCell>
                 <TableCell>{row.course}</TableCell>
                 <TableCell>
                   <StatusChip status={row.status} />

@@ -1,18 +1,20 @@
 "use client";
 
 import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
-import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 export default function StudentHeader() {
+  const router = useRouter();
+
   return (
     <header className="flex items-center px-4 py-3">
-      <Link
-        href="/studentslist"
+      <button
+        onClick={() => router.back()}
         className="flex items-center text-sm font-medium text-blue-600 hover:text-gray-900"
       >
         <ArrowBackIosNewIcon fontSize="small" className="mr-1" />
         Volver
-      </Link>
+      </button>
     </header>
   );
 }

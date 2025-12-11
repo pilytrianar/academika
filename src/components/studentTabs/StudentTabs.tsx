@@ -11,16 +11,16 @@ export default function StudentTabs() {
   const [tab, setTab] = useState(0);
 
   return (
-    <Card className="p-6 shadow-sm ">
+    <Card className="p-6 shadow-sm">
       <Tabs
         value={tab}
         onChange={(_, v) => setTab(v)}
         textColor="primary"
         indicatorColor="primary"
       >
-        <Tab className="" label="Información" />
-        <Tab label="Reporte Académico" />
-        <Tab label="Notas Disciplinarias" />
+        <Tab label="Información" className="normal-case font-medium" />
+        <Tab label="Reporte Académico" className="normal-case font-medium" />
+        <Tab label="Notas Disciplinarias" className="normal-case font-medium" />
       </Tabs>
 
       <Divider className="my-4" />
