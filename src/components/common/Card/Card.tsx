@@ -1,3 +1,5 @@
+'use client';
+
 import { Card as MuiCard, Typography } from '@mui/material';
 import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';

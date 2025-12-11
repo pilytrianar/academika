@@ -1,4 +1,5 @@
 'use client';
+
 import ActivityItem from '@/components/common/ActivityItem';
 import NavigationCard from '@/components/common/NavigationCard';
 import { Box, Container, Typography } from '@mui/material';

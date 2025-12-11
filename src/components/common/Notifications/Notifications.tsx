@@ -1,3 +1,5 @@
+'use client';
+
 import { useState } from 'react';
 import { Badge, Typography, Box, List, useTheme, alpha } from '@mui/material';
 import Button from '../Button';
