@@ -1,8 +1,8 @@
-import type { Meta, StoryObj } from "@storybook/react";
-import StudentAverage from "./StudentAverage";
+import type { Meta, StoryObj } from '@storybook/react';
+import StudentAverage from './StudentAverage';
 
 const meta: Meta<typeof StudentAverage> = {
-  title: "Stats/StudentAverage",
+  title: 'Stats/StudentAverage',
   component: StudentAverage,
 };
 

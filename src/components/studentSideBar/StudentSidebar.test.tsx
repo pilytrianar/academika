@@ -1,38 +1,87 @@
-import { render, screen } from "@testing-library/react";
-import { describe, it, expect, vi } from "vitest";
-import StudentSidebar from "./StudentSidebar";
+import React from 'react';
+import { render, screen } from '@testing-library/react';
+import { describe, it, expect, vi } from 'vitest';
+import '@testing-library/jest-dom/vitest';
+import StudentSidebar from './StudentSidebar';
 
-// Mock de Next/Image para evitar errores en pruebas
-vi.mock("next/image", () => ({
+// Mock Next.js Image component
+vi.mock('next/image', () => ({
   default: (props: any) => {
-    // Simula un <img> básico
+    // eslint-disable-next-line @next/next/no-img-element, jsx-a11y/alt-text
     return <img {...props} />;
   },
 }));
 
-describe("Componente StudentSidebar", () => {
-  it("Se renderizan correctamente los datos del estudiante", () => {
-    render(<StudentSidebar />);
+describe('StudentSidebar', () => {
+  describe('Student information', () => {
+    it('displays student name', () => {
+      render(<StudentSidebar />);
+      
+      expect(screen.getByText('Joan Romero')).toBeInTheDocument();
+    });
 
-    expect(screen.getByText("Joan Romero")).toBeInTheDocument();
-    expect(screen.getByText("Curso: 7° Grado")).toBeInTheDocument();
-    expect(screen.getByText("Edad: 16 años")).toBeInTheDocument();
+    it('displays student course', () => {
+      render(<StudentSidebar />);
+      
+      expect(screen.getByText('Curso: 7° Grado')).toBeInTheDocument();
+    });
+
+    it('displays student age', () => {
+      render(<StudentSidebar />);
+      
+      expect(screen.getByText('Edad: 16 años')).toBeInTheDocument();
+    });
   });
 
-  it("Renderiza correctamente la imagen del avatar", () => {
-    render(<StudentSidebar />);
+  describe('Avatar image', () => {
+    it('renders student avatar', () => {
+      render(<StudentSidebar />);
+      
+      const avatar = screen.getByAltText('Avatar');
+      expect(avatar).toBeInTheDocument();
+    });
 
-    const image = screen.getByAltText("Avatar");
+    it('avatar has correct source', () => {
+      render(<StudentSidebar />);
+      
+      const avatar = screen.getByAltText('Avatar');
+      expect(avatar).toHaveAttribute('src', '/img/userIcon.png');
+    });
 
-    expect(image).toBeInTheDocument();
-    expect(image).toHaveAttribute("src", "/img/userIcon.png");
+    it('avatar has rounded style', () => {
+      render(<StudentSidebar />);
+      
+      const avatar = screen.getByAltText('Avatar');
+      expect(avatar).toHaveClass('rounded-full');
+    });
   });
 
-  it("Renderiza el botón Contactar", () => {
-    render(<StudentSidebar />);
+  describe('Contact button', () => {
+    it('renders contact button', () => {
+      render(<StudentSidebar />);
+      
+      const button = screen.getByRole('button', { name: /contactar/i });
+      expect(button).toBeInTheDocument();
+    });
 
-    const button = screen.getByRole("button", { name: "Contactar" });
+    it('contact button is full width', () => {
+      render(<StudentSidebar />);
+      
+      const button = screen.getByRole('button', { name: /contactar/i });
+      expect(button).toHaveClass('MuiButton-fullWidth');
+    });
+  });
 
-    expect(button).toBeInTheDocument();
+  describe('Component structure', () => {
+    it('renders inside a Card', () => {
+      const { container } = render(<StudentSidebar />);
+      
+      const card = container.querySelector('.MuiCard-root');
+      expect(card).toBeInTheDocument();
+    });
+
+    it('renders without crashing', () => {
+      expect(() => render(<StudentSidebar />)).not.toThrow();
+    });
   });
 });
