@@ -1,3 +1,5 @@
+'use client';
+
 import Button from '@/components/common/Button';
 import Card from '@/components/common/Card';
 import { Add } from '@mui/icons-material';

@@ -1,3 +1,5 @@
+'use client';
+
 import { Button as MuiButton, SxProps, Theme } from '@mui/material';
 import { ButtonProps } from './Button.types';
 

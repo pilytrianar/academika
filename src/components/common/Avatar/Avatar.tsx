@@ -1,3 +1,5 @@
+'use client';
+
 import { MenuItem, Typography, useTheme } from '@mui/material';
 import { AccountCircle } from '@mui/icons-material';
 import DropDownMenu from '../DropDownMenu';

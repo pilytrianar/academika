@@ -1,3 +1,5 @@
+'use client';
+
 import { Box, IconButton as MuiIconButton, Typography } from '@mui/material';
 import { IconButtonProps } from './IconButton.types';
 
