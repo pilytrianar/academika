@@ -1,3 +1,5 @@
+'use client';
+
 import { useRouter } from 'next/navigation';
 import { Field, Form, Formik } from 'formik';
 import { useState } from 'react';

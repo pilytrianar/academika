@@ -1,3 +1,5 @@
+'use client';
+
 import { AppBar as MuiAppBar, Toolbar, IconButton, Box } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 import Avatar from '../Avatar';

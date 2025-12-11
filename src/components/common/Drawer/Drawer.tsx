@@ -1,3 +1,5 @@
+'use client';
+
 import { Drawer as MuiDrawer } from '@mui/material';
 import DrawerContent from './DrawerContent';
 import HomeIcon from '@mui/icons-material/Home';

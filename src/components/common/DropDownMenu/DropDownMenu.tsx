@@ -1,3 +1,5 @@
+'use client';
+
 import { Menu } from '@mui/material';
 import { useMenu } from '../../hooks/useMenu';
 import { DropDownMenuProps } from './DropDownMenu.types';

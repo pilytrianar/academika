@@ -1,3 +1,5 @@
+'use client';
+
 import Image from 'next/image';
 import Button from '../Button';
 import { ArrowForward } from '@mui/icons-material';
