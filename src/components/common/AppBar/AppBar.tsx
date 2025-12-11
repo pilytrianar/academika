@@ -5,12 +5,13 @@ import MenuIcon from '@mui/icons-material/Menu';
 import Avatar from '../Avatar';
 import Notifications from '../Notifications';
 import { AppBarProps, Notification } from './AppBar.types';
+import { useRouter } from 'next/navigation';
 
-const AVATAR_MENU_DATA = [
-  { id: 1, text: 'Perfil' },
-  { id: 2, text: 'Ajustes' },
-  { id: 3, text: 'Cerrar Sesión' },
-];
+// const AVATAR_MENU_DATA = [
+//   { id: 1, text: 'Perfil' },
+//   { id: 2, text: 'Ajustes' },
+//   { id: 3, text: 'Cerrar Sesión' },
+// ];
 
 const NOTIFICATIONS_MENU_DATA: Notification[] = [
   {
@@ -49,16 +50,37 @@ const NOTIFICATIONS_MENU_DATA: Notification[] = [
 
 const CURRENT_USER = 'Andrés Bohórquez';
 
-const AppBar = ({ width, onClick, ...props }: AppBarProps) => {
+const AppBar = ({ width, onClick }: AppBarProps) => {
+  const router = useRouter();
+
+  const AVATAR_MENU_DATA = [
+    {
+      id: 1,
+      text: 'Perfil',
+      onClick: () => router.push('/studentinfo'),
+    },
+    {
+      id: 2,
+      text: 'Ajustes',
+      onClick: () => console.log('Ajustes'),
+    },
+    {
+      id: 3,
+      text: 'Cerrar Sesión',
+      onClick: () => router.push('/login'),
+    },
+  ];
+
   return (
     <MuiAppBar
       position='fixed'
-      color='transparent'
       sx={{
+        backgroundColor: '#fff',
+        color: '#000',
+        boxShadow: 1,
         width: { xs: '100%', sm: `calc(100% - ${width})` },
         ml: { sm: width },
       }}
-      {...props}
     >
       <Toolbar>
         <IconButton
@@ -70,6 +92,7 @@ const AppBar = ({ width, onClick, ...props }: AppBarProps) => {
         >
           <MenuIcon />
         </IconButton>
+
         <Box sx={{ ml: 'auto', display: 'flex', alignItems: 'center' }}>
           <Notifications data={NOTIFICATIONS_MENU_DATA} />
           <Avatar data={AVATAR_MENU_DATA} user={CURRENT_USER} />

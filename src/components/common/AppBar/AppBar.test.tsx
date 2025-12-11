@@ -1,113 +1,156 @@
+import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { mockMenuIcon } from '@/test/mocks';
+import '@testing-library/jest-dom/vitest';
 import AppBar from './AppBar';
 
-import { AvatarProps } from '../Avatar/Avatar.types';
-import { NotificationsProps } from '../Notifications/Notifications.types';
-
-// Mock de Material-UI
-mockMenuIcon();
-
-// Mock de los componentes hijos
-vi.mock('../Avatar', () => ({
-  default: ({ user }: AvatarProps) => <div data-testid='avatar-component'>Avatar: {user}</div>,
+// Mock Next.js router
+const mockPush = vi.fn();
+vi.mock('next/navigation', () => ({
+  useRouter: () => ({
+    push: mockPush,
+  }),
 }));
 
-vi.mock('../Notifications', () => ({
-  default: ({ data }: NotificationsProps) => (
-    <div data-testid='notifications-component'>Notifications: {data.length}</div>
+// Type definitions for mocks
+interface AvatarMenuItem {
+  id: number;
+  text: string;
+  onClick: () => void;
+}
+
+interface NotificationItem {
+  id: string;
+  title: string;
+  description: string;
+  time: string;
+  type: string;
+  read: boolean;
+}
+
+// Mock child components
+vi.mock('../Avatar', () => ({
+  default: ({ data, user }: { data: AvatarMenuItem[]; user: string }) => (
+    <div data-testid="avatar">
+      <span>{user}</span>
+      {data.map((item) => (
+        <button key={item.id} onClick={item.onClick}>
+          {item.text}
+        </button>
+      ))}
+    </div>
   ),
 }));
 
-describe('Componente AppBar', () => {
-  const mockOnClick = vi.fn();
+vi.mock('../Notifications', () => ({
+  default: ({ data }: { data: NotificationItem[] }) => (
+    <div data-testid="notifications">
+      {data.map((notif) => (
+        <div key={notif.id}>{notif.title}</div>
+      ))}
+    </div>
+  ),
+}));
 
+describe('AppBar', () => {
   beforeEach(() => {
-    vi.clearAllMocks();
+    mockPush.mockClear();
   });
 
-  describe('Renderizado', () => {
+  describe('Rendering', () => {
     it('renders the AppBar component', () => {
-      const { container } = render(<AppBar width='240px' onClick={mockOnClick} />);
-
+      const { container } = render(<AppBar width="240px" onClick={() => {}} />);
+      
       const appBar = container.querySelector('.MuiAppBar-root');
       expect(appBar).toBeInTheDocument();
     });
 
-    it('renders the menu button', () => {
-      render(<AppBar width='240px' onClick={mockOnClick} />);
-
-      const menuButton = screen.getByRole('button', { name: /open drawer/i });
+    it('renders menu button', () => {
+      render(<AppBar width="240px" onClick={() => {}} />);
+      
+      const menuButton = screen.getByLabelText('open drawer');
       expect(menuButton).toBeInTheDocument();
-    });
-
-    it('renders MenuIcon inside the button', () => {
-      render(<AppBar width='240px' onClick={mockOnClick} />);
-
-      const menuIcon = screen.getByTestId('MenuIcon');
-      expect(menuIcon).toBeInTheDocument();
     });
 
     it('renders Avatar component', () => {
-      render(<AppBar width='240px' onClick={mockOnClick} />);
-
-      const avatar = screen.getByTestId('avatar-component');
-      expect(avatar).toBeInTheDocument();
-      expect(avatar).toHaveTextContent('Andrés Bohórquez');
+      render(<AppBar width="240px" onClick={() => {}} />);
+      
+      expect(screen.getByTestId('avatar')).toBeInTheDocument();
     });
 
     it('renders Notifications component', () => {
-      render(<AppBar width='240px' onClick={mockOnClick} />);
+      render(<AppBar width="240px" onClick={() => {}} />);
+      
+      expect(screen.getByTestId('notifications')).toBeInTheDocument();
+    });
 
-      const notifications = screen.getByTestId('notifications-component');
-      expect(notifications).toBeInTheDocument();
+    it('displays current user name', () => {
+      render(<AppBar width="240px" onClick={() => {}} />);
+      
+      expect(screen.getByText('Andrés Bohórquez')).toBeInTheDocument();
     });
   });
 
-  describe('Interacción', () => {
+  describe('Menu button interaction', () => {
     it('calls onClick when menu button is clicked', () => {
-      render(<AppBar width='240px' onClick={mockOnClick} />);
-
-      const menuButton = screen.getByRole('button', { name: /open drawer/i });
+      const mockClick = vi.fn();
+      render(<AppBar width="240px" onClick={mockClick} />);
+      
+      const menuButton = screen.getByLabelText('open drawer');
       fireEvent.click(menuButton);
-
-      expect(mockOnClick).toHaveBeenCalledTimes(1);
-    });
-
-    it('does not throw error when onClick is not provided', () => {
-      render(<AppBar width='240px' />);
-
-      const menuButton = screen.getByRole('button', { name: /open drawer/i });
-      expect(() => fireEvent.click(menuButton)).not.toThrow();
+      
+      expect(mockClick).toHaveBeenCalledTimes(1);
     });
   });
 
-  describe('Accesibilidad', () => {
-    it('has correct aria-label on menu button', () => {
-      render(<AppBar width='240px' onClick={mockOnClick} />);
-
-      const menuButton = screen.getByRole('button', { name: /open drawer/i });
-      expect(menuButton).toHaveAttribute('aria-label', 'open drawer');
+  describe('Avatar menu actions', () => {
+    it('navigates to profile page', () => {
+      render(<AppBar width="240px" onClick={() => {}} />);
+      
+      const perfilButton = screen.getByRole('button', { name: /perfil/i });
+      fireEvent.click(perfilButton);
+      
+      expect(mockPush).toHaveBeenCalledWith('/studentinfo');
     });
 
-    it('menu button is rendered correctly', () => {
-      render(<AppBar width='240px' onClick={mockOnClick} />);
-
-      const menuButton = screen.getByRole('button', { name: /open drawer/i });
-      expect(menuButton).toBeInTheDocument();
+    it('navigates to login on logout', () => {
+      render(<AppBar width="240px" onClick={() => {}} />);
+      
+      const logoutButton = screen.getByRole('button', { name: /cerrar sesión/i });
+      fireEvent.click(logoutButton);
+      
+      expect(mockPush).toHaveBeenCalledWith('/login');
     });
   });
 
-  describe('Props', () => {
+  describe('Notifications', () => {
+    it('displays notification titles', () => {
+      render(<AppBar width="240px" onClick={() => {}} />);
+      
+      expect(screen.getByText('New Course Available')).toBeInTheDocument();
+      expect(screen.getByText('Assignment Graded')).toBeInTheDocument();
+    });
+  });
+
+  describe('Responsive behavior', () => {
     it('accepts custom width prop', () => {
-      const { container } = render(<AppBar width='300px' onClick={mockOnClick} />);
-      expect(container).toBeInTheDocument();
+      const { container } = render(<AppBar width="300px" onClick={() => {}} />);
+      
+      const appBar = container.querySelector('.MuiAppBar-root');
+      expect(appBar).toBeInTheDocument();
+    });
+  });
+
+  describe('Component structure', () => {
+    it('renders without crashing', () => {
+      expect(() => render(<AppBar width="240px" onClick={() => {}} />)).not.toThrow();
     });
 
-    it('accepts additional MUI AppBar props', () => {
-      const { container } = render(<AppBar width='240px' onClick={mockOnClick} elevation={4} />);
-      expect(container).toBeInTheDocument();
+    it('contains Toolbar', () => {
+      const { container } = render(<AppBar width="240px" onClick={() => {}} />);
+      
+      const toolbar = container.querySelector('.MuiToolbar-root');
+      expect(toolbar).toBeInTheDocument();
     });
   });
 });
