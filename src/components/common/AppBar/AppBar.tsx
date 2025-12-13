@@ -5,6 +5,7 @@ import MenuIcon from '@mui/icons-material/Menu';
 import Avatar from '../Avatar';
 import Notifications from '../Notifications';
 import { AppBarProps, Notification } from './AppBar.types';
+import { useAuth } from '@/hooks/useAuth';
 import { useRouter } from 'next/navigation';
 
 // const AVATAR_MENU_DATA = [
@@ -48,9 +49,10 @@ const NOTIFICATIONS_MENU_DATA: Notification[] = [
   }, */
 ];
 
-const CURRENT_USER = 'Andrés Bohórquez';
-
 const AppBar = ({ width, onClick }: AppBarProps) => {
+  const { user } = useAuth();
+  const fullName = `${user?.firstName} ${user?.lastName}`.trim();
+
   const router = useRouter();
 
   const AVATAR_MENU_DATA = [
@@ -80,11 +82,11 @@ const AppBar = ({ width, onClick }: AppBarProps) => {
         boxShadow: 1,
         width: { xs: '100%', sm: `calc(100% - ${width})` },
         ml: { sm: width },
+        bgcolor: 'white',
       }}
     >
       <Toolbar>
         <IconButton
-          color='inherit'
           aria-label='open drawer'
           edge='start'
           onClick={onClick}
@@ -95,7 +97,7 @@ const AppBar = ({ width, onClick }: AppBarProps) => {
 
         <Box sx={{ ml: 'auto', display: 'flex', alignItems: 'center' }}>
           <Notifications data={NOTIFICATIONS_MENU_DATA} />
-          <Avatar data={AVATAR_MENU_DATA} user={CURRENT_USER} />
+          <Avatar data={AVATAR_MENU_DATA} user={fullName} />
         </Box>
       </Toolbar>
     </MuiAppBar>

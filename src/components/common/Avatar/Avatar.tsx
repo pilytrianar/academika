@@ -49,7 +49,7 @@ const Avatar = ({ data, user }: AvatarProps) => {
           paper: {
             elevation: 0,
             sx: {
-              mt: 1.5,
+              mt: 1,
               borderRadius: 2,
               boxShadow: '0 4px 20px rgba(0,0,0,0.1)',
               border: `1px solid ${theme.palette.divider}`,

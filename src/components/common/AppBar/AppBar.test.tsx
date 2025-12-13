@@ -1,9 +1,21 @@
-import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import '@testing-library/jest-dom/vitest';
 import AppBar from './AppBar';
 
+import { mockMenuIcon } from '@/test/mocks';
+
+// Mock de Material-UI
+mockMenuIcon();
+
+// Mock del hook useAuth
+vi.mock('@/hooks/useAuth', () => ({
+  useAuth: vi.fn().mockReturnValue({
+    user: { firstName: 'Andrés', lastName: 'Bohórquez' },
+  }),
+}));
+
+// Mock de los componentes hijos
 // Mock Next.js router
 const mockPush = vi.fn();
 vi.mock('next/navigation', () => ({

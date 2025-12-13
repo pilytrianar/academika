@@ -33,17 +33,23 @@ const DrawerContent = ({ menuItems, pathname, handleNavigation }: DrawerContentP
       </Toolbar>
       <Divider />
       <List>
-        {menuItems.map(item => (
-          <ListItem key={item.text} disablePadding>
-            <ListItemButton
-              selected={pathname === item.path}
-              onClick={() => handleNavigation?.(item.path)}
-            >
-              <ListItemIcon>{item.icon}</ListItemIcon>
-              <ListItemText primary={item.text} color='red' />
-            </ListItemButton>
-          </ListItem>
-        ))}
+        {menuItems.map(item => {
+          const isActive = pathname === item.path;
+          const color = isActive ? 'primary.main' : 'inherit';
+
+          return (
+            <ListItem key={item.text} disablePadding>
+              <ListItemButton selected={isActive} onClick={() => handleNavigation?.(item.path)}>
+                <ListItemIcon sx={{ color }}>{item.icon}</ListItemIcon>
+                <ListItemText>
+                  <Typography sx={{ color, fontWeight: isActive ? 600 : 0 }}>
+                    {item.text}
+                  </Typography>
+                </ListItemText>
+              </ListItemButton>
+            </ListItem>
+          );
+        })}
       </List>
     </Box>
   );

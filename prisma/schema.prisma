@@ -1,19 +1,214 @@
 generator client {
-  provider = "prisma-client"
+  provider = "prisma-client-js"
   output   = "../src/generated/prisma"
 }
 
 datasource db {
   provider = "mysql"
-  url      = env("DATABASE_URL")
+}
+
+// ==================== ENUMS ====================
+
+enum UserStatus {
+  ACTIVE
+  INACTIVE
+  SUSPENDED
+}
+
+// ==================== AUTH & USERS ====================
+
+model Role {
+  id        Int      @id @default(autoincrement()) @db.UnsignedInt
+  name      String   @unique @db.VarChar(50) // admin, teacher, student
+  users     User[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("roles")
 }
 
 model User {
-  id        Int      @id @default(autoincrement()) @db.UnsignedInt
-  email     String   @unique(map: "email") @db.VarChar(255)
-  password  String   @db.VarChar(255)
-  createdAt DateTime @default(now()) @db.DateTime(0)
-  updatedAt DateTime @default(now()) @db.DateTime(0)
+  id        Int        @id @default(autoincrement()) @db.UnsignedInt
+  email     String     @unique @db.VarChar(255)
+  password  String     @db.VarChar(255)
+  status    UserStatus @default(ACTIVE)
+  roleId    Int        @db.UnsignedInt
+  role      Role       @relation(fields: [roleId], references: [id])
+  profile   UserProfile?
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
 
+  @@index([roleId])
   @@map("users")
+}
+
+model UserProfile {
+  id          Int       @id @default(autoincrement()) @db.UnsignedInt
+  userId      Int       @unique @db.UnsignedInt
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  firstName   String    @db.VarChar(100)
+  lastName    String    @db.VarChar(100)
+  birthDate   DateTime? @db.Date
+  phone       String?   @db.VarChar(20)
+  address     String?   @db.VarChar(255)
+  avatarUrl   String?   @db.VarChar(500)
+  
+  // Campos específicos para estudiantes
+  studentId   String?   @unique @db.VarChar(20) // ID único del estudiante (12345, 54321, etc.)
+  courseId    Int?      @db.UnsignedInt
+  course      Course?   @relation(fields: [courseId], references: [id])
+  guardian    Guardian?
+  grades      Grade[]
+  disciplinaryNotes DisciplinaryNote[]
+  
+  // Campos específicos para profesores
+  subjects    SubjectTeacher[]
+  
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  @@index([courseId])
+  @@map("user_profiles")
+}
+
+model Guardian {
+  id              Int         @id @default(autoincrement()) @db.UnsignedInt
+  userProfileId   Int         @unique @db.UnsignedInt
+  userProfile     UserProfile @relation(fields: [userProfileId], references: [id], onDelete: Cascade)
+  fullName        String      @db.VarChar(200)
+  phone           String      @db.VarChar(20)
+  email           String?     @db.VarChar(255)
+  relationship    String?     @db.VarChar(50) // Padre, Madre, Tutor, etc.
+  createdAt       DateTime    @default(now())
+  updatedAt       DateTime    @updatedAt
+
+  @@map("guardians")
+}
+
+// ==================== ACADEMIC ====================
+
+model Course {
+  id          Int           @id @default(autoincrement()) @db.UnsignedInt
+  name        String        @db.VarChar(100) // "Séptimo", "Noveno", "Once"
+  section     String        @db.VarChar(10)  // "A", "B", "C", "D"
+  year        Int           @db.Year
+  students    UserProfile[]
+  subjects    SubjectCourse[]
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+
+  @@unique([name, section, year])
+  @@map("courses")
+}
+
+model Subject {
+  id          Int             @id @default(autoincrement()) @db.UnsignedInt
+  name        String          @unique @db.VarChar(100) // Matemáticas, Historia, Inglés
+  description String?         @db.Text
+  courses     SubjectCourse[]
+  createdAt   DateTime        @default(now())
+  updatedAt   DateTime        @updatedAt
+
+  @@map("subjects")
+}
+
+// Relación Asignatura-Curso (qué asignaturas se dan en qué cursos)
+model SubjectCourse {
+  id          Int             @id @default(autoincrement()) @db.UnsignedInt
+  subjectId   Int             @db.UnsignedInt
+  subject     Subject         @relation(fields: [subjectId], references: [id], onDelete: Cascade)
+  courseId    Int             @db.UnsignedInt
+  course      Course          @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  teachers    SubjectTeacher[]
+  grades      Grade[]
+  createdAt   DateTime        @default(now())
+  updatedAt   DateTime        @updatedAt
+
+  @@unique([subjectId, courseId])
+  @@index([courseId])
+  @@map("subject_courses")
+}
+
+// Relación Profesor-Asignatura-Curso
+model SubjectTeacher {
+  id              Int           @id @default(autoincrement()) @db.UnsignedInt
+  teacherId       Int           @db.UnsignedInt
+  teacher         UserProfile   @relation(fields: [teacherId], references: [id], onDelete: Cascade)
+  subjectCourseId Int           @db.UnsignedInt
+  subjectCourse   SubjectCourse @relation(fields: [subjectCourseId], references: [id], onDelete: Cascade)
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+
+  @@unique([teacherId, subjectCourseId])
+  @@index([subjectCourseId])
+  @@map("subject_teachers")
+}
+
+// ==================== GRADES & DISCIPLINE ====================
+
+model Grade {
+  id              Int           @id @default(autoincrement()) @db.UnsignedInt
+  studentId       Int           @db.UnsignedInt
+  student         UserProfile   @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  subjectCourseId Int           @db.UnsignedInt
+  subjectCourse   SubjectCourse @relation(fields: [subjectCourseId], references: [id], onDelete: Cascade)
+  value           Decimal       @db.Decimal(4, 2) // 0.00 - 10.00
+  period          Int           @db.TinyInt // 1, 2, 3, 4 (períodos académicos)
+  description     String?       @db.VarChar(255) // "Examen parcial", "Proyecto final"
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+
+  @@index([studentId])
+  @@index([subjectCourseId])
+  @@map("grades")
+}
+
+model DisciplinaryNote {
+  id          Int         @id @default(autoincrement()) @db.UnsignedInt
+  studentId   Int         @db.UnsignedInt
+  student     UserProfile @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  title       String      @db.VarChar(200)
+  description String      @db.Text
+  severity    String      @db.VarChar(20) // LOW, MEDIUM, HIGH
+  date        DateTime    @db.Date
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+
+  @@index([studentId])
+  @@map("disciplinary_notes")
+}
+
+// ==================== NOTIFICATIONS ====================
+
+model Notification {
+  id          Int      @id @default(autoincrement()) @db.UnsignedInt
+  title       String   @db.VarChar(255)
+  description String?  @db.Text
+  type        String   @db.VarChar(50) // NEW_STUDENT, REMINDER, GRADE, etc.
+  isRead      Boolean  @default(false)
+  userId      Int?     @db.UnsignedInt // null = global notification
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([userId])
+  @@map("notifications")
+}
+
+// ==================== CALENDAR (opcional, para futuro) ====================
+
+model CalendarEvent {
+  id          Int      @id @default(autoincrement()) @db.UnsignedInt
+  title       String   @db.VarChar(255)
+  description String?  @db.Text
+  startDate   DateTime
+  endDate     DateTime?
+  allDay      Boolean  @default(false)
+  type        String   @db.VarChar(50) // EXAM, MEETING, HOLIDAY, DEADLINE
+  courseId    Int?     @db.UnsignedInt // null = evento global
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([courseId])
+  @@index([startDate])
+  @@map("calendar_events")
 }

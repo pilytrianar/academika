@@ -10,10 +10,10 @@ import { usePathname } from 'next/navigation.js';
 import { DrawerProps, MenuItem } from './Drawer.types';
 
 const menuItems: MenuItem[] = [
-  { text: 'Inicio', icon: <HomeIcon />, path: '/dashboard' },
-  { text: 'Asignaturas', icon: <BookIcon />, path: '/dashboard/asignaturas' },
-  { text: 'Estudiantes', icon: <PeopleIcon />, path: '/dashboard/estudiantes' },
-  { text: 'Calendario', icon: <CalendarMonthIcon />, path: '/dashboard/calendario' },
+  { text: 'Inicio', icon: <HomeIcon />, path: '/' },
+  { text: 'Asignaturas', icon: <BookIcon />, path: '/asignaturas' },
+  { text: 'Estudiantes', icon: <PeopleIcon />, path: '/estudiantes' },
+  { text: 'Calendario', icon: <CalendarMonthIcon />, path: '/calendario' },
 ];
 
 const Drawer = ({ isMobile = false, handleNavigation, ...props }: DrawerProps) => {

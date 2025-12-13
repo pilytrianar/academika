@@ -1,7 +1,7 @@
 'use client';
 
-import LoginPage from './login/page';
+import DashboardWrapper from './dashboard/DashboardWrapper';
 
-export default function Home() {
-  return <LoginPage />;
+export default function HomePage() {
+  return <DashboardWrapper />;
 }

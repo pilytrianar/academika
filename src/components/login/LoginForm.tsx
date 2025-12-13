@@ -13,35 +13,71 @@ import PasswordField from '@/components/common/PasswordField';
 
 import { loginSchema } from '@/lib/schemas';
 import { API_MESSAGES, basePostReq } from '@/utils/constants';
-import { HandleSubmitProps, LoginValues } from '@/types/auth';
-
-const handleSubmit = async (props: HandleSubmitProps) => {
-  const { values, router, setError, setLoading } = props;
-
-  setLoading(true);
-  const query = { ...basePostReq, body: JSON.stringify(values) };
-  const res = await fetch('/api/auth/login', query);
-  const parsedRes = await res.json();
-  setLoading(false);
-
-  if (!parsedRes.success) return setError(parsedRes.error || API_MESSAGES[500]);
-  router.replace('/');
-};
+import { LoginValues } from '@/types/auth';
+import useActions from '@/hooks/useActions';
+import { setAuthenticated } from '@/lib/store/slices/auth/auth';
+import { setAuthToken } from '@/server/auth/config/storage.service';
+import { decodeJWT } from '../auth/jwt.helpers';
 
 export default function LoginForm() {
-  const initialValues = { email: '', password: '' };
+  const router = useRouter();
+  const actions = useActions({ setAuthenticated });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const router = useRouter();
+  const initialValues = { email: '', password: '' };
+
+  const handleSubmit = async (values: LoginValues) => {
+    setLoading(true);
+    setError(null);
+
+    try {
+      const res = await fetch('/api/auth/login', {
+        ...basePostReq,
+        body: JSON.stringify(values),
+      });
+
+      const data = await res.json();
+
+      if (!data.success) {
+        setError(data.error || API_MESSAGES[500]);
+        return;
+      }
+
+      // Solo guarda el token
+      setAuthToken(data.token);
+
+      // Decodifica el token para obtener el user
+      const payload = decodeJWT(data.token);
+
+      if (!payload) {
+        setError('Token inválido');
+        return;
+      }
+
+      // Actualiza Redux con el user del token
+      actions.setAuthenticated({
+        isAuthenticated: true,
+        user: {
+          id: payload.userId,
+          email: payload.email,
+          firstName: payload.firstName,
+          lastName: payload.lastName,
+        },
+      });
+
+      router.push('/');
+    } catch (err) {
+      console.error('Error en login:', err);
+      setError('Error al iniciar sesión');
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
-    <Formik
-      initialValues={initialValues}
-      validationSchema={loginSchema}
-      onSubmit={async values => await handleSubmit({ values, setLoading, setError, router })}
-    >
+    <Formik initialValues={initialValues} validationSchema={loginSchema} onSubmit={handleSubmit}>
       {({ errors, touched }) => (
-        <Form className='flex flex-col gap-20'>
+        <Form className='flex flex-col gap-3'>
           <Grid container spacing={2}>
             <Grid size={12}>
               <Field name='email' disabled={loading} as={EmailField} />
