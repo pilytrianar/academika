@@ -18,12 +18,15 @@ const IconButton = ({ children, hasText, onClick, text, ...props }: IconButtonPr
             border: '1px solid',
             borderColor: 'divider',
             borderRadius: '50%',
+            p: 1,
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
+            width: 40,
+            height: 40,
           }}
         >
-          <Typography variant='h6' sx={{ fontWeight: 600 }}>
+          <Typography color='primary' sx={{ fontWeight: 600 }}>
             {text}
           </Typography>
         </Box>

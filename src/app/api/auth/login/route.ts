@@ -17,8 +17,8 @@ export async function POST(req: Request) {
   }
 
   try {
-    const user = await login(body.email, body.password);
-    return NextResponse.json({ success: true, user }, { status: 200 });
+    const { token, ...rest } = await login(body.email, body.password);
+    return NextResponse.json({ success: true, user: { ...rest }, token }, { status: 200 });
   } catch (err) {
     const error = isError(err) ? err.message : API_MESSAGES[500];
     return NextResponse.json({ success: false, error }, { status: 500 });

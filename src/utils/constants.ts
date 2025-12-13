@@ -6,3 +6,5 @@ export const API_MESSAGES = {
 };
 
 export const basePostReq = { method: 'POST', headers: { 'Content-Type': 'application/json' } };
+
+export const PUBLIC_ROUTES = ['/login', '/signup', '/forgot-password'];

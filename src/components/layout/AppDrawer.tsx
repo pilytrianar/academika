@@ -2,19 +2,21 @@
 
 import { useState } from 'react';
 import { Box, Toolbar } from '@mui/material';
-import { useRouter } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import Drawer from '../common/Drawer';
 
 import AppBar from '../common/AppBar';
 import { DrawerWidth } from '@/global.constants';
+import { PUBLIC_ROUTES } from '@/utils/constants';
 
-interface DashboardLayoutProps {
-  children: React.ReactNode;
-}
-
-export default function DashboardLayout({ children }: DashboardLayoutProps) {
+export default function AppDrawer({ children }: { children: React.ReactNode }) {
   const [mobileOpen, setMobileOpen] = useState(false);
   const router = useRouter();
+  const pathname = usePathname();
+
+  const isPublicRoute = PUBLIC_ROUTES.includes(pathname);
+
+  if (isPublicRoute) return <>{children}</>;
 
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
