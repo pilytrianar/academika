@@ -1,4 +1,5 @@
 import { render, screen, fireEvent } from '@testing-library/react';
+import React from 'react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { mockNotificationIcons } from '@/test/mocks';
 import Notifications from './Notifications';
@@ -48,22 +49,31 @@ vi.mock('./NotificationsItems', () => ({
 
 const mockNotifications = [
   {
-    id: '1',
+    id: 1,
     title: 'New Course Available',
     description: 'Advanced React Patterns has been added to your library.',
     time: '2 mins ago',
     type: 'info' as const,
-    read: false,
+    isRead: false,
+    createdAt: '2025-12-14T10:35:59.000Z',
+    userId: 1,
   },
   {
-    id: '2',
+    id: 2,
     title: 'Assignment Graded',
     description: 'Your submission has been graded. Score: 98/100',
     time: '1 hour ago',
     type: 'success' as const,
-    read: false,
+    isRead: false,
+    createdAt: '2025-12-14T10:35:59.000Z',
+    userId: 1,
   },
 ];
+
+const Wrapper = () => {
+  const [data, setData] = React.useState(mockNotifications);
+  return <Notifications data={data} onClear={() => setData([])} />;
+};
 
 describe('Componente Notifications', () => {
   beforeEach(() => {
@@ -142,8 +152,7 @@ describe('Componente Notifications', () => {
 
   describe('Interacción', () => {
     it('limpia todas las notificaciones cuando se hace clic en el botón de limpiar', () => {
-      render(<Notifications data={mockNotifications} />);
-
+      render(<Wrapper />);
       const clearButton = screen.getByRole('button', { name: /limpiar/i });
       fireEvent.click(clearButton);
 
@@ -152,7 +161,7 @@ describe('Componente Notifications', () => {
     });
 
     it('oculta el botón de limpiar después de limpiar todas las notificaciones', () => {
-      render(<Notifications data={mockNotifications} />);
+      render(<Wrapper />);
 
       const clearButton = screen.getByRole('button', { name: /limpiar/i });
       fireEvent.click(clearButton);
@@ -162,7 +171,7 @@ describe('Componente Notifications', () => {
     });
 
     it('muestra el estado vacío después de limpiar las notificaciones', () => {
-      render(<Notifications data={mockNotifications} />);
+      render(<Wrapper />);
 
       const clearButton = screen.getByRole('button', { name: /limpiar/i });
       fireEvent.click(clearButton);

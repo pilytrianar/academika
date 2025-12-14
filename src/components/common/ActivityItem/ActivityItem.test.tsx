@@ -16,7 +16,7 @@ describe('Componente ActivityItem', () => {
 
   it('Se renderiza correctamente el fondo para el badge de acción', () => {
     const props = {
-      imageBadge: 'accion' as const,
+      imageBadge: 'NEW_STUDENT' as const,
       title: 'Test Activity',
       description: 'Test Description',
     };
@@ -27,7 +27,7 @@ describe('Componente ActivityItem', () => {
 
   it('Se renderiza correctamente el fondo para el badge de recordatorio', () => {
     const props = {
-      imageBadge: 'recordatorio' as const,
+      imageBadge: 'REMINDER' as const,
       title: 'Test Activity',
       description: 'Test Description',
     };
