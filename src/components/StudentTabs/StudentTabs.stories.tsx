@@ -3,8 +3,8 @@ import StudentTabs from './StudentTabs';
 import { StudentDetail } from '@/types/student';
 
 // Mock data
-const mockStudent: StudentDetail = {
-  id: '1',
+const mockStudent: StudentDetail & { firstName: string; lastName: string; course: string } = {
+  id: 1,
   email: 'joan.romero@academika.com',
   profile: {
     firstName: 'Joan',
@@ -21,17 +21,19 @@ const mockStudent: StudentDetail = {
       fullName: 'Elon Musk',
       phone: '3145677880',
       email: 'elon.musk@academika.com',
+      relationship: 'Padre',
     },
   },
   firstName: 'Joan',
   lastName: 'Romero',
   course: 'Septimo D',
   status: 'Activo',
+  average: '4.5',
 };
 
-const mockStudent2: StudentDetail = {
+const mockStudent2: StudentDetail & { firstName: string; lastName: string; course: string } = {
   ...mockStudent,
-  id: '2',
+  id: 2,
   email: 'andrea.triana@academika.com',
   profile: {
     ...mockStudent.profile,
@@ -43,6 +45,7 @@ const mockStudent2: StudentDetail = {
       section: 'Grado A',
     },
   },
+  average: '4.8',
 };
 
 const meta: Meta<typeof StudentTabs> = {
