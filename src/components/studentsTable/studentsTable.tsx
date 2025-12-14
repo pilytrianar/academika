@@ -30,7 +30,7 @@ type Student = {
 
 interface Props {
   search?: string;
-  students: Student[];
+  students?: Student[];
 }
 
 export default function StudentsTable({ search = '', students = [] }: Props) {

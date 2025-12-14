@@ -1,12 +1,15 @@
 export interface Notification {
-  id: string;
+  id: number;
   title: string;
   description: string;
-  time: string;
-  type: 'info' | 'success' | 'warning' | 'error';
-  read: boolean;
+  createdAt: string;
+  type: string;
+  isRead: boolean;
+  userId: number | null;
 }
 
 export interface NotificationsProps {
   data: Notification[];
+  loading?: boolean;
+  onClear?: () => void;
 }

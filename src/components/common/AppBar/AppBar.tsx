@@ -4,54 +4,28 @@ import { AppBar as MuiAppBar, Toolbar, IconButton, Box } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 import Avatar from '../Avatar';
 import Notifications from '../Notifications';
-import { AppBarProps, Notification } from './AppBar.types';
+import { AppBarProps } from './AppBar.types';
 import { useAuth } from '@/hooks/useAuth';
 import { useRouter } from 'next/navigation';
+import { useNotifications } from '@/hooks/useNotifications';
 
-// const AVATAR_MENU_DATA = [
-//   { id: 1, text: 'Perfil' },
-//   { id: 2, text: 'Ajustes' },
-//   { id: 3, text: 'Cerrar Sesión' },
-// ];
-
-const NOTIFICATIONS_MENU_DATA: Notification[] = [
-  {
-    id: '1',
-    title: 'New Course Available',
-    description: 'Advanced React Patterns has been added to your library.',
-    time: '2 mins ago',
-    type: 'info',
-    read: false,
-  },
-  {
-    id: '2',
-    title: 'Assignment Graded',
-    description: 'Your submission for "Agentic AI" has been graded. Score: 98/100',
-    time: '1 hour ago',
-    type: 'success',
-    read: false,
-  },
-  /* {
-    id: '3',
-    title: 'System Maintenance',
-    description: 'Scheduled maintenance tonight at 2:00 AM EST.',
-    time: '5 hours ago',
-    type: 'warning',
-    read: true,
-  },
-  {
-    id: '4',
-    title: 'Payment Failed',
-    description: 'We could not process your subscription renewal.',
-    time: '1 day ago',
-    type: 'error',
-    read: true,
-  }, */
-];
+import { useState, useMemo } from 'react';
 
 const AppBar = ({ width, onClick }: AppBarProps) => {
   const { user, logout } = useAuth();
   const fullName = `${user?.firstName} ${user?.lastName}`.trim();
+  const { data, loading } = useNotifications({ userId: user?.id, limit: 10 });
+  const [clearedAt, setClearedAt] = useState<number | null>(null);
+
+  const handleClear = () => {
+    setClearedAt(Date.now());
+  };
+
+  const filteredNotifications = useMemo(() => {
+    const notifications = data?.notifications || [];
+    if (!clearedAt) return notifications;
+    return notifications.filter(n => new Date(n.createdAt).getTime() > clearedAt);
+  }, [data?.notifications, clearedAt]);
 
   const router = useRouter();
 
@@ -59,7 +33,7 @@ const AppBar = ({ width, onClick }: AppBarProps) => {
     {
       id: 1,
       text: 'Perfil',
-      onClick: () => router.push('/studentinfo'),
+      onClick: () => router.push('/not-found'),
     },
     {
       id: 2,
@@ -96,7 +70,7 @@ const AppBar = ({ width, onClick }: AppBarProps) => {
         </IconButton>
 
         <Box sx={{ ml: 'auto', display: 'flex', alignItems: 'center' }}>
-          <Notifications data={NOTIFICATIONS_MENU_DATA} />
+          <Notifications data={filteredNotifications} loading={loading} onClear={handleClear} />
           <Avatar data={AVATAR_MENU_DATA} user={fullName} />
         </Box>
       </Toolbar>

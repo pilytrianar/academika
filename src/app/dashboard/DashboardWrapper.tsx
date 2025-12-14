@@ -3,10 +3,17 @@
 import ActivityItem from '@/components/common/ActivityItem';
 import NavigationCard from '@/components/common/NavigationCard';
 import { useAuth } from '@/hooks/useAuth';
-import { Box, Container, Typography } from '@mui/material';
+import { Box, Container, Typography, List } from '@mui/material';
+import { useNotifications } from '@/hooks/useNotifications';
+import ComponentLoader from '@/components/common/Loaders/ComponentLoader';
+import { useRouter } from 'next/navigation';
 
 export default function DashboardWrapper() {
   const { user } = useAuth();
+  const { data, loading } = useNotifications({ userId: user?.id, limit: 5 });
+  const router = useRouter();
+  const notifications = data?.notifications || [];
+
   return (
     <Container maxWidth='xl'>
       <Typography sx={{ fontWeight: 'bold' }} variant='h4'>
@@ -19,35 +26,37 @@ export default function DashboardWrapper() {
           title='Asignaturas'
           description='Gestiona tus asignaturas'
           btnText='Ver Detalles'
-          onClick={() => console.log('Ver Detalles')}
+          onClick={() => router.push('/asignaturas')}
         />
         <NavigationCard
           image='estudiantes'
           title='Estudiantes'
           description='Gestiona tus estudiantes'
           btnText='Ver Detalles'
-          onClick={() => console.log('Ver Detalles')}
+          onClick={() => router.push('/estudiantes')}
         />
       </Box>
       <Typography sx={{ fontWeight: 'bold' }} variant='h5'>
         Ultimas Novedades
       </Typography>
       <Box sx={{ my: 2, p: 1 }}>
-        <ActivityItem
-          description='Hace 3 horas'
-          imageBadge='accion'
-          title='Nuevo estudiante agregado en "Estadística"'
-        />
-        <ActivityItem
-          description='Ayer'
-          imageBadge='recordatorio'
-          title='Recordatorio: Calificar proyecto el 25 Dic'
-        />
-        <ActivityItem
-          description='Hace 2 días'
-          imageBadge='recordatorio'
-          title='Recordatorio: Agregar nuevos criterios de calificación'
-        />
+        {loading && <ComponentLoader />}
+        {notifications.length === 0 ? (
+          <Typography variant='body2' color='textSecondary' sx={{ textAlign: 'center', p: 4 }}>
+            No hay novedades recientes
+          </Typography>
+        ) : (
+          <List>
+            {notifications.map(notification => (
+              <ActivityItem
+                key={notification.id}
+                description={notification.description}
+                imageBadge={notification.type}
+                title={notification.title}
+              />
+            ))}
+          </List>
+        )}
       </Box>
     </Container>
   );
