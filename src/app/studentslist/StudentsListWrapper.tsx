@@ -1,6 +1,6 @@
 'use client';
 import React, { useState } from 'react';
-import BarOptions from '@/components/barOptions/barOptions';
+import BarOptions from '@/components/BarOptions/BarOptions';
 import StudentsTable from '@/components/studentsTable/studentsTable';
 
 export default function StudentsListWrapper() {

@@ -4,11 +4,12 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
+    "build:prod": "prisma generate && prisma migrate deploy && npx prisma db seed && next build",
     "build": "next build",
     "start": "next start",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx --fix",
     "format": "prettier --write .",
-    "db:migrate": "npx prisma migrate resolve --applied 0_init",
+    "db:migrate": "npx prisma migrate dev —name init",
     "storybook": "storybook dev -p 6006",
     "test": "vitest run",
     "test:watch": "vitest",
