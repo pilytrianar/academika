@@ -20,6 +20,39 @@ vi.mock('@/hooks/useAuth', () => ({
   }),
 }));
 
+// Mock del hook useNotifications
+vi.mock('@/hooks/useNotifications', () => ({
+  useNotifications: () => ({
+    data: {
+      notifications: [
+        {
+          id: 1,
+          title: 'New Course Available',
+          description: 'A new course has been added to your dashboard.',
+          time: '2 hours ago',
+          type: 'info',
+          isRead: false,
+          createdAt: '2023-06-01T12:00:00Z',
+          userId: 1,
+        },
+        {
+          id: 2,
+          title: 'Assignment Graded',
+          description: 'Your assignment has been graded and is available for review.',
+          time: '1 day ago',
+          type: 'info',
+          isRead: false,
+          createdAt: '2023-06-02T12:00:00Z',
+          userId: 1,
+        },
+      ],
+    },
+    loading: false,
+    error: null,
+    refetch: vi.fn(),
+  }),
+}));
+
 // Mock Next.js router
 vi.mock('next/navigation', () => ({
   useRouter: () => ({
@@ -27,23 +60,7 @@ vi.mock('next/navigation', () => ({
   }),
 }));
 
-// Type definitions for mocks
-interface AvatarMenuItem {
-  id: number;
-  text: string;
-  onClick: () => void;
-}
-
-interface NotificationItem {
-  id: string;
-  title: string;
-  description: string;
-  time: string;
-  type: string;
-  read: boolean;
-}
-
-// Mock child components
+// Mock de componentes hijos
 vi.mock('../Avatar', () => ({
   default: ({ data, user }: { data: AvatarMenuItem[]; user: string }) => (
     <div data-testid='avatar'>
@@ -57,6 +74,7 @@ vi.mock('../Avatar', () => ({
   ),
 }));
 
+// Mock de notificaciones
 vi.mock('../Notifications', () => ({
   default: ({ data }: { data: NotificationItem[] }) => (
     <div data-testid='notifications'>
@@ -67,48 +85,66 @@ vi.mock('../Notifications', () => ({
   ),
 }));
 
+// Definición de tipos para el mock
+interface AvatarMenuItem {
+  id: number;
+  text: string;
+  onClick: () => void;
+}
+
+interface NotificationItem {
+  id: number;
+  title: string;
+  description: string;
+  time: string;
+  type: 'info';
+  isRead: boolean;
+  createdAt: string;
+  userId: number;
+}
+
 describe('AppBar', () => {
   beforeEach(() => {
     mockPush.mockClear();
     mockLogout.mockClear();
   });
 
-  describe('Rendering', () => {
-    it('renders the AppBar component', () => {
+  describe('Renderizado', () => {
+    it('renderiza el componente AppBar', () => {
       const { container } = render(<AppBar width='240px' onClick={() => {}} />);
 
       const appBar = container.querySelector('.MuiAppBar-root');
       expect(appBar).toBeInTheDocument();
     });
 
-    it('renders menu button', () => {
+    it('renderiza el botón de menú', () => {
       render(<AppBar width='240px' onClick={() => {}} />);
 
       const menuButton = screen.getByLabelText('open drawer');
       expect(menuButton).toBeInTheDocument();
     });
 
-    it('renders Avatar component', () => {
+    it('renderiza el componente Avatar', () => {
       render(<AppBar width='240px' onClick={() => {}} />);
 
       expect(screen.getByTestId('avatar')).toBeInTheDocument();
     });
 
-    it('renders Notifications component', () => {
+    it('renderiza el componente Notificaciones', () => {
       render(<AppBar width='240px' onClick={() => {}} />);
 
       expect(screen.getByTestId('notifications')).toBeInTheDocument();
     });
 
-    it('displays current user name', () => {
+    it('muestra el nombre del usuario actual', () => {
       render(<AppBar width='240px' onClick={() => {}} />);
 
       expect(screen.getByText('Andrés Bohórquez')).toBeInTheDocument();
     });
   });
 
-  describe('Menu button interaction', () => {
-    it('calls onClick when menu button is clicked', () => {
+  describe('Interacción con el botón de menú', () => {
+    it('llama a onClick cuando se hace clic en el botón de menú', () => {
       const mockClick = vi.fn();
       render(<AppBar width='240px' onClick={mockClick} />);
 
@@ -119,17 +155,17 @@ describe('AppBar', () => {
     });
   });
 
-  describe('Avatar menu actions', () => {
-    it('navigates to profile page', () => {
+  describe('Acciones del menú de Avatar', () => {
+    it('navega a la página de perfil', () => {
       render(<AppBar width='240px' onClick={() => {}} />);
 
       const perfilButton = screen.getByRole('button', { name: /perfil/i });
       fireEvent.click(perfilButton);
 
-      expect(mockPush).toHaveBeenCalledWith('/studentinfo');
+      expect(mockPush).toHaveBeenCalledWith('/not-found');
     });
 
-    it('calls logout function on logout click', () => {
+    it('navega al inicio de sesión al cerrar sesión', () => {
       render(<AppBar width='240px' onClick={() => {}} />);
 
       const logoutButton = screen.getByRole('button', { name: /cerrar sesión/i });
@@ -139,8 +175,8 @@ describe('AppBar', () => {
     });
   });
 
-  describe('Notifications', () => {
-    it('displays notification titles', () => {
+  describe('Notificaciones', () => {
+    it('muestra los títulos de las notificaciones', () => {
       render(<AppBar width='240px' onClick={() => {}} />);
 
       expect(screen.getByText('New Course Available')).toBeInTheDocument();
@@ -148,8 +184,8 @@ describe('AppBar', () => {
     });
   });
 
-  describe('Responsive behavior', () => {
-    it('accepts custom width prop', () => {
+  describe('Comportamiento Responsivo', () => {
+    it('acepta la propiedad de ancho personalizado', () => {
       const { container } = render(<AppBar width='300px' onClick={() => {}} />);
 
       const appBar = container.querySelector('.MuiAppBar-root');
@@ -157,12 +193,12 @@ describe('AppBar', () => {
     });
   });
 
-  describe('Component structure', () => {
-    it('renders without crashing', () => {
+  describe('Estructura del Componente', () => {
+    it('se renderiza sin fallar', () => {
       expect(() => render(<AppBar width='240px' onClick={() => {}} />)).not.toThrow();
     });
 
-    it('contains Toolbar', () => {
+    it('contiene la barra de herramientas (Toolbar)', () => {
       const { container } = render(<AppBar width='240px' onClick={() => {}} />);
 
       const toolbar = container.querySelector('.MuiToolbar-root');

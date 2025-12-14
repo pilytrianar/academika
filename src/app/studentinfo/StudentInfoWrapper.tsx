@@ -5,11 +5,12 @@ import { useSearchParams } from 'next/navigation';
 
 import StudentHeader from '@/components/StudentHeader';
 import StudentSidebar from '@/components/StudentSideBar/StudentSidebar';
-import StudentAverage from '@/components/studentAverage/StudentAverage';
-import StudentTabs from '@/components/StudentTabs/StudentTabs';
+import StudentAverage from '@/components/StudentAverage/StudentAverage';
+import StudentTabs from '@/components/StudentTabs';
 
 import { getStudentById } from '@/utils/fetchStudentsData';
 import { StudentDetail } from '@/types/student';
+import ComponentLoader from '@/components/common/Loaders/ComponentLoader';
 
 export default function StudentInfoWrapper() {
   const searchParams = useSearchParams();
@@ -36,7 +37,7 @@ export default function StudentInfoWrapper() {
   }, [id]);
 
   if (loading) {
-    return <p className='p-6'>Cargando estudiante...</p>;
+    return <ComponentLoader />;
   }
 
   if (!student) {

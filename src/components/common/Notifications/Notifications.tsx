@@ -1,6 +1,5 @@
 'use client';
 
-import { useState } from 'react';
 import { Badge, Typography, Box, List, useTheme, alpha } from '@mui/material';
 import Button from '../Button';
 import IconButton from '../Button/IconButton';
@@ -9,14 +8,14 @@ import DoneAllIcon from '@mui/icons-material/DoneAll';
 import DeleteSweepIcon from '@mui/icons-material/DeleteSweepOutlined';
 import NotificationItem from './NotificationsItems';
 import DropDownMenu from '../DropDownMenu';
-import { Notification, NotificationsProps } from './Notifications.types';
+import { NotificationsProps } from './Notifications.types';
+import ComponentLoader from '../Loaders/ComponentLoader';
 
-const Notifications = ({ data }: NotificationsProps) => {
-  const [notifications, setNotifications] = useState<Notification[]>(data);
+const Notifications = ({ data, loading, onClear }: NotificationsProps) => {
   const theme = useTheme();
 
   const handleClearAll = () => {
-    setNotifications([]);
+    if (onClear) onClear();
   };
 
   return (
@@ -36,7 +35,7 @@ const Notifications = ({ data }: NotificationsProps) => {
               },
             }}
           >
-            <Badge badgeContent={notifications.length} color='error'>
+            <Badge badgeContent={data.length} color='error'>
               <NotificationsIcon />
             </Badge>
           </IconButton>
@@ -71,7 +70,7 @@ const Notifications = ({ data }: NotificationsProps) => {
           <Typography variant='h6' sx={{ fontWeight: 700, fontSize: '1rem' }}>
             Notificaciones
           </Typography>
-          {notifications.length > 0 && (
+          {data.length > 0 && (
             <Button
               text='Limpiar'
               variant='text'
@@ -91,7 +90,8 @@ const Notifications = ({ data }: NotificationsProps) => {
           )}
         </Box>
 
-        {notifications.length === 0 ? (
+        {loading && <ComponentLoader />}
+        {data.length === 0 ? (
           <Box sx={{ p: 6, textAlign: 'center', color: 'text.secondary' }}>
             <DoneAllIcon sx={{ fontSize: 48, mb: 2, opacity: 0.2 }} />
             <Typography variant='body1' fontWeight={500}>
@@ -103,11 +103,11 @@ const Notifications = ({ data }: NotificationsProps) => {
           </Box>
         ) : (
           <List sx={{ p: 0 }}>
-            {notifications.map((notification, index) => (
+            {data.map((notification, index) => (
               <NotificationItem
                 key={notification.id}
                 notification={notification}
-                isLast={index === notifications.length - 1}
+                isLast={index === data.length - 1}
                 theme={theme}
               />
             ))}

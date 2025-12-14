@@ -1,12 +1,15 @@
-export const ImageBadgeTypes = {
-  accion: '/img/accion.svg',
-  recordatorio: '/img/recordatorio.svg',
+export const ImageBadgeTypes: Record<string, string> = {
+  NEW_STUDENT: '/img/accion.svg',
+  REMINDER: '/img/recordatorio.svg',
+  GRADE: '/img/recordatorio.svg',
+  DISCIPLINARY: '/img/accion.svg',
+  ANNOUNCEMENT: '/img/recordatorio.svg',
 };
 
 type ImageBadgeType = keyof typeof ImageBadgeTypes;
 
 export interface ActivityItemProps {
-  imageBadge: ImageBadgeType;
+  imageBadge: ImageBadgeType | string;
   title: string;
   description: string;
 }

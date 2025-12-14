@@ -11,22 +11,26 @@ import {
 
 import CheckCircleIcon from '@mui/icons-material/CheckCircleOutline';
 import WarningIcon from '@mui/icons-material/WarningAmber';
-import ErrorIcon from '@mui/icons-material/ErrorOutline';
 import InfoIcon from '@mui/icons-material/InfoOutlined';
+import SchoolIcon from '@mui/icons-material/School';
+import AnnouncementIcon from '@mui/icons-material/Announcement';
 
-import { NotificationItemProps, NotificationItem as Notification } from './NotificationItems.types';
+import { NotificationItemProps } from './NotificationItems.types';
+import { formatDate } from '@/utils/helpers.common';
 
-const getNotificationIcon = (type: Notification['type']) => {
+const getNotificationIcon = (type: string) => {
   const iconProps = { fontSize: 'small' as const };
 
   switch (type) {
-    case 'success':
+    case 'NEW_STUDENT':
+      return <SchoolIcon color='success' {...iconProps} />;
+    case 'GRADE':
       return <CheckCircleIcon color='success' {...iconProps} />;
-    case 'warning':
+    case 'DISCIPLINARY':
       return <WarningIcon color='warning' {...iconProps} />;
-    case 'error':
-      return <ErrorIcon color='error' {...iconProps} />;
-    default:
+    case 'ANNOUNCEMENT':
+      return <AnnouncementIcon color='info' {...iconProps} />;
+    case 'REMINDER':
       return <InfoIcon color='info' {...iconProps} />;
   }
 };
@@ -42,11 +46,11 @@ const NotificationItem = ({ notification, isLast, theme }: NotificationItemProps
           cursor: 'pointer',
           transition: 'all 0.2s',
           minHeight: 80,
-          bgcolor: notification.read ? 'transparent' : alpha(theme.palette.primary.main, 0.02),
+          bgcolor: notification.isRead ? 'transparent' : alpha(theme.palette.primary.main, 0.02),
           '&:hover': {
             bgcolor: alpha(theme.palette.primary.main, 0.05),
           },
-          borderLeft: notification.read
+          borderLeft: !notification.isRead
             ? '3px solid transparent'
             : `3px solid ${theme.palette.primary.main}`,
         }}
@@ -69,7 +73,7 @@ const NotificationItem = ({ notification, isLast, theme }: NotificationItemProps
               <Typography
                 variant='subtitle2'
                 sx={{
-                  fontWeight: notification.read ? 500 : 700,
+                  fontWeight: notification.isRead ? 500 : 700,
                   fontSize: '0.9rem',
                 }}
               >
@@ -80,7 +84,7 @@ const NotificationItem = ({ notification, isLast, theme }: NotificationItemProps
                 color='text.secondary'
                 sx={{ fontSize: '0.7rem', ml: 1, whiteSpace: 'nowrap' }}
               >
-                {notification.time}
+                {formatDate(notification.createdAt)}
               </Typography>
             </Box>
           }

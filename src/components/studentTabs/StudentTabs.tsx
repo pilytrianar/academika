@@ -5,8 +5,8 @@ import { useState } from 'react';
 
 import StudentInformationTab from '../StudentInformationTab';
 import AcademicReportTab from '../academicReportTab/AcademicReportTab';
-import DisciplineNotesTab from '../DisciplineNotesTab/DisciplineNotesTab';
 import { StudentDetail } from '@/types/student';
+import DisciplineNotesTab from '../DisciplineNotesTab/DisciplineNotesTab';
 
 interface StudentTabsProps {
   student: StudentDetail;

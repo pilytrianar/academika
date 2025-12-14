@@ -19,7 +19,7 @@ const meta: Meta<typeof ActivityItem> = {
     },
     imageBadge: {
       control: 'radio',
-      options: ['accion', 'recordatorio'],
+      options: ['NEW_STUDENT', 'REMINDER'],
       description: 'Tipo de Badge',
     },
   },
@@ -40,7 +40,7 @@ export const optionOne: Story = {
   args: {
     title: 'Nuevo estudiante agregado en "Estadística"',
     description: 'Ayer',
-    imageBadge: 'accion',
+    imageBadge: 'NEW_STUDENT',
   },
 };
 
@@ -48,6 +48,6 @@ export const optionTwo: Story = {
   args: {
     title: 'Recordatorio: Calificar proyecto el 25 Dic',
     description: 'Hace 2 días',
-    imageBadge: 'recordatorio',
+    imageBadge: 'REMINDER',
   },
 };
