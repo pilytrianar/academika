@@ -8,16 +8,19 @@ import { mockMenuIcon } from '@/test/mocks';
 // Mock de Material-UI
 mockMenuIcon();
 
+// Crear las funciones mock
+const mockLogout = vi.fn();
+const mockPush = vi.fn();
+
 // Mock del hook useAuth
 vi.mock('@/hooks/useAuth', () => ({
-  useAuth: vi.fn().mockReturnValue({
+  useAuth: () => ({
     user: { firstName: 'Andrés', lastName: 'Bohórquez' },
+    logout: mockLogout,
   }),
 }));
 
-// Mock de los componentes hijos
 // Mock Next.js router
-const mockPush = vi.fn();
 vi.mock('next/navigation', () => ({
   useRouter: () => ({
     push: mockPush,
@@ -67,6 +70,7 @@ vi.mock('../Notifications', () => ({
 describe('AppBar', () => {
   beforeEach(() => {
     mockPush.mockClear();
+    mockLogout.mockClear();
   });
 
   describe('Rendering', () => {
@@ -125,13 +129,13 @@ describe('AppBar', () => {
       expect(mockPush).toHaveBeenCalledWith('/studentinfo');
     });
 
-    it('navigates to login on logout', () => {
+    it('calls logout function on logout click', () => {
       render(<AppBar width='240px' onClick={() => {}} />);
 
       const logoutButton = screen.getByRole('button', { name: /cerrar sesión/i });
       fireEvent.click(logoutButton);
 
-      expect(mockPush).toHaveBeenCalledWith('/login');
+      expect(mockLogout).toHaveBeenCalledTimes(1);
     });
   });
 

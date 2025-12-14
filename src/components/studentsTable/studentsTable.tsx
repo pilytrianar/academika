@@ -1,4 +1,5 @@
 'use client';
+
 import React, { useMemo, useState } from 'react';
 import Paper from '@mui/material/Paper';
 import Table from '@mui/material/Table';
@@ -14,11 +15,11 @@ import MenuItem from '@mui/material/MenuItem';
 import Select from '@mui/material/Select';
 import MenuItemMUI from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
-// import InputLabel from "@mui/material/InputLabel";
-import StatusChip from '../statusChip/statusChip';
 import Pagination from '@mui/material/Pagination';
 import Stack from '@mui/material/Stack';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import StatusChip from '../StatusChip';
 
 type Student = {
   id: string;
@@ -27,37 +28,29 @@ type Student = {
   status: 'Activo' | 'Inactivo' | 'Suspendido';
 };
 
-const sampleData: Student[] = [
-  { id: '12345', name: 'Andrea Triana', course: 'Noveno A', status: 'Activo' },
-  { id: '54321', name: 'José de la Ossa', course: 'Decimo B', status: 'Activo' },
-  { id: '09876', name: 'Joan Romero', course: 'Septimo D', status: 'Inactivo' },
-  { id: '67890', name: 'Kathe Diaz', course: 'Octavo C', status: 'Suspendido' },
-  { id: '441821', name: 'Andres Bohorquez', course: 'Once A', status: 'Activo' },
-  { id: '11111', name: 'Estudiante Extra 1', course: 'Once B', status: 'Activo' },
-  { id: '22222', name: 'Estudiante Extra 2', course: 'Once C', status: 'Inactivo' },
-];
-
 interface Props {
   search?: string;
+  students: Student[];
 }
 
-export default function StudentsTable({ search = '' }: Props) {
+export default function StudentsTable({ search = '', students = [] }: Props) {
+  const router = useRouter();
   const [rowsPerPage, setRowsPerPage] = useState<number>(5);
   const [page, setPage] = useState<number>(1);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [menuRowId, setMenuRowId] = useState<string | null>(null);
 
   const filtered = useMemo(() => {
     const q = search.trim().toLowerCase();
-    if (!q) return sampleData;
-    return sampleData.filter(
+    if (!q) return students;
+
+    return students.filter(
       s =>
         s.name.toLowerCase().includes(q) ||
         s.id.toLowerCase().includes(q) ||
         s.course.toLowerCase().includes(q)
     );
-  }, [search]);
+  }, [search, students]);
 
   const pageCount = Math.max(1, Math.ceil(filtered.length / rowsPerPage));
   const currentRows = filtered.slice((page - 1) * rowsPerPage, page * rowsPerPage);
@@ -70,6 +63,13 @@ export default function StudentsTable({ search = '' }: Props) {
   const handleCloseMenu = () => {
     setAnchorEl(null);
     setMenuRowId(null);
+  };
+
+  const handleView = () => {
+    if (menuRowId) {
+      router.push(`/studentinfo?id=${menuRowId}`);
+    }
+    handleCloseMenu();
   };
 
   return (
@@ -90,12 +90,12 @@ export default function StudentsTable({ search = '' }: Props) {
             {currentRows.map(row => (
               <TableRow key={row.id}>
                 <TableCell>
-                  <Link href={`/studentinfo?id=${row.id}`} className=' hover:text-blue-600'>
+                  <Link href={`/studentinfo?id=${row.id}`} className='hover:text-blue-600'>
                     {row.name}
                   </Link>
                 </TableCell>
                 <TableCell>
-                  <Link href={`/studentinfo?id=${row.id}`} className=' hover:text-blue-600'>
+                  <Link href={`/studentinfo?id=${row.id}`} className='hover:text-blue-600'>
                     {row.id}
                   </Link>
                 </TableCell>
@@ -110,6 +110,7 @@ export default function StudentsTable({ search = '' }: Props) {
                 </TableCell>
               </TableRow>
             ))}
+
             {currentRows.length === 0 && (
               <TableRow>
                 <TableCell colSpan={5} align='center' sx={{ py: 6, color: 'text.secondary' }}>
@@ -131,7 +132,6 @@ export default function StudentsTable({ search = '' }: Props) {
                 setRowsPerPage(Number(e.target.value));
                 setPage(1);
               }}
-              size='small'
             >
               <MenuItemMUI value={5}>5</MenuItemMUI>
               <MenuItemMUI value={10}>10</MenuItemMUI>
@@ -140,28 +140,20 @@ export default function StudentsTable({ search = '' }: Props) {
           </FormControl>
         </div>
 
-        <div className='flex items-center gap-4'>
-          <div className='text-sm text-gray-600'>
-            {filtered.length > 0
-              ? `${(page - 1) * rowsPerPage + 1}-${Math.min(page * rowsPerPage, filtered.length)} de ${filtered.length}`
-              : '0 de 0'}
-          </div>
-
-          <Stack spacing={2}>
-            <Pagination
-              count={pageCount}
-              page={page}
-              onChange={(_, v) => setPage(v)}
-              shape='rounded'
-              color='primary'
-              size='small'
-            />
-          </Stack>
-        </div>
+        <Stack spacing={2}>
+          <Pagination
+            count={pageCount}
+            page={page}
+            onChange={(_, v) => setPage(v)}
+            shape='rounded'
+            color='primary'
+            size='small'
+          />
+        </Stack>
       </div>
 
       <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={handleCloseMenu}>
-        <MenuItem onClick={handleCloseMenu}>Ver</MenuItem>
+        <MenuItem onClick={handleView}>Ver</MenuItem>
         <MenuItem onClick={handleCloseMenu}>Editar</MenuItem>
         <MenuItem onClick={handleCloseMenu}>Eliminar</MenuItem>
       </Menu>

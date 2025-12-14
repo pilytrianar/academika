@@ -7,6 +7,7 @@ import SearchIcon from '@mui/icons-material/Search';
 import FilterListIcon from '@mui/icons-material/FilterList';
 import DownloadIcon from '@mui/icons-material/FileDownload';
 import AddIcon from '@mui/icons-material/Add';
+import { Typography } from '@mui/material';
 
 interface Props {
   onSearch?: (v: string) => void;
@@ -20,10 +21,12 @@ export default function BarOptions({ onSearch, onAdd, onFilter, onExport }: Prop
     <div className='w-full flex flex-col gap-4'>
       <div className='flex items-center justify-between'>
         <div>
-          <h1 className='text-3xl font-semibold'>Busqueda de Estudiantes</h1>
-          <p className='text-sm text-gray-600'>
+          <Typography sx={{ fontWeight: 'bold' }} variant='h4'>
+            Busqueda de Estudiantes
+          </Typography>
+          <Typography variant='subtitle1'>
             Encuentra y gestiona la información de los estudiantes
-          </p>
+          </Typography>
         </div>
 
         <div className='flex items-center gap-3'>

@@ -50,7 +50,7 @@ const NOTIFICATIONS_MENU_DATA: Notification[] = [
 ];
 
 const AppBar = ({ width, onClick }: AppBarProps) => {
-  const { user } = useAuth();
+  const { user, logout } = useAuth();
   const fullName = `${user?.firstName} ${user?.lastName}`.trim();
 
   const router = useRouter();
@@ -69,7 +69,7 @@ const AppBar = ({ width, onClick }: AppBarProps) => {
     {
       id: 3,
       text: 'Cerrar Sesión',
-      onClick: () => router.push('/login'),
+      onClick: logout,
     },
   ];
 

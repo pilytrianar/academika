@@ -3,11 +3,16 @@
 import { Card, Tabs, Tab, Divider } from '@mui/material';
 import { useState } from 'react';
 
-import StudentInformationTab from '../studentInformationTab/StudentInformationTab';
+import StudentInformationTab from '../StudentInformationTab';
 import AcademicReportTab from '../academicReportTab/AcademicReportTab';
-import DisciplineNotesTab from '../disciplineNotesTab/DisciplineNotesTab';
+import DisciplineNotesTab from '../DisciplineNotesTab/DisciplineNotesTab';
+import { StudentDetail } from '@/types/student';
 
-export default function StudentTabs() {
+interface StudentTabsProps {
+  student: StudentDetail;
+}
+
+export default function StudentTabs({ student }: StudentTabsProps) {
   const [tab, setTab] = useState(0);
 
   return (
@@ -20,7 +25,7 @@ export default function StudentTabs() {
 
       <Divider className='my-4' />
 
-      {tab === 0 && <StudentInformationTab />}
+      {tab === 0 && <StudentInformationTab student={student} />}
       {tab === 1 && <AcademicReportTab />}
       {tab === 2 && <DisciplineNotesTab />}
     </Card>

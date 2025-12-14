@@ -6,6 +6,7 @@ import BarOptions from './BarOptions';
 
 describe('BarOptions', () => {
   describe('Rendering', () => {
+    // Verifica que se rendericen el título y la descripción
     it('renders the title and description', () => {
       render(<BarOptions />);
 
@@ -15,6 +16,7 @@ describe('BarOptions', () => {
       ).toBeInTheDocument();
     });
 
+    // Verifica que se rendericen todos los botones
     it('renders all buttons', () => {
       render(<BarOptions />);
 
@@ -23,6 +25,7 @@ describe('BarOptions', () => {
       expect(screen.getByRole('button', { name: /exportar/i })).toBeInTheDocument();
     });
 
+    // Verifica que se renderice el campo de búsqueda
     it('renders search input field', () => {
       render(<BarOptions />);
 
@@ -30,6 +33,7 @@ describe('BarOptions', () => {
       expect(searchInput).toBeInTheDocument();
     });
 
+    // Verifica que los botones tengan sus íconos
     it('renders icons in buttons', () => {
       render(<BarOptions />);
 
@@ -42,6 +46,7 @@ describe('BarOptions', () => {
       expect(exportButton.querySelector('svg')).toBeInTheDocument();
     });
 
+    // Verifica que el input de búsqueda tenga su ícono
     it('renders search icon in input', () => {
       render(<BarOptions />);
 
@@ -53,6 +58,7 @@ describe('BarOptions', () => {
   });
 
   describe('Search functionality', () => {
+    // Verifica que onSearch se llame al escribir en el campo de búsqueda
     it('calls onSearch when typing in search field', () => {
       const mockOnSearch = vi.fn();
       render(<BarOptions onSearch={mockOnSearch} />);
@@ -63,6 +69,7 @@ describe('BarOptions', () => {
       expect(mockOnSearch).toHaveBeenCalledWith('Andrea');
     });
 
+    // Verifica que onSearch se llame múltiples veces mientras el usuario escribe
     it('calls onSearch multiple times as user types', () => {
       const mockOnSearch = vi.fn();
       render(<BarOptions onSearch={mockOnSearch} />);
@@ -77,6 +84,7 @@ describe('BarOptions', () => {
       expect(mockOnSearch).toHaveBeenLastCalledWith('And');
     });
 
+    // Verifica que no crashee cuando onSearch no está definido
     it('does not crash when onSearch is not provided', () => {
       render(<BarOptions />);
 
@@ -87,6 +95,7 @@ describe('BarOptions', () => {
       }).not.toThrow();
     });
 
+    // Verifica que onSearch se llame con string vacío al limpiar el input
     it('calls onSearch with empty string when clearing input', () => {
       const mockOnSearch = vi.fn();
       render(<BarOptions onSearch={mockOnSearch} />);
@@ -101,6 +110,7 @@ describe('BarOptions', () => {
   });
 
   describe('Button interactions', () => {
+    // Verifica que onAdd se llame al hacer clic en el botón de añadir estudiante
     it('calls onAdd when clicking add student button', () => {
       const mockOnAdd = vi.fn();
       render(<BarOptions onAdd={mockOnAdd} />);
@@ -111,6 +121,7 @@ describe('BarOptions', () => {
       expect(mockOnAdd).toHaveBeenCalledTimes(1);
     });
 
+    // Verifica que onFilter se llame al hacer clic en el botón de filtros
     it('calls onFilter when clicking filter button', () => {
       const mockOnFilter = vi.fn();
       render(<BarOptions onFilter={mockOnFilter} />);
@@ -121,6 +132,7 @@ describe('BarOptions', () => {
       expect(mockOnFilter).toHaveBeenCalledTimes(1);
     });
 
+    // Verifica que onExport se llame al hacer clic en el botón de exportar
     it('calls onExport when clicking export button', () => {
       const mockOnExport = vi.fn();
       render(<BarOptions onExport={mockOnExport} />);
@@ -131,6 +143,7 @@ describe('BarOptions', () => {
       expect(mockOnExport).toHaveBeenCalledTimes(1);
     });
 
+    // Verifica que no crashee cuando los callbacks de los botones no están definidos
     it('does not crash when button callbacks are not provided', () => {
       render(<BarOptions />);
 
@@ -145,6 +158,7 @@ describe('BarOptions', () => {
       }).not.toThrow();
     });
 
+    // Verifica que los botones puedan ser clickeados múltiples veces
     it('can click buttons multiple times', () => {
       const mockOnAdd = vi.fn();
       const mockOnFilter = vi.fn();
@@ -168,6 +182,7 @@ describe('BarOptions', () => {
   });
 
   describe('Integration scenarios', () => {
+    // Verifica que todos los callbacks funcionen juntos correctamente
     it('handles all callbacks working together', () => {
       const mockOnSearch = vi.fn();
       const mockOnAdd = vi.fn();
@@ -183,19 +198,19 @@ describe('BarOptions', () => {
         />
       );
 
-      // Type in search
+      // Escribir en el campo de búsqueda
       const searchInput = screen.getByPlaceholderText('Buscar por Nombre, ID o Curso');
       fireEvent.change(searchInput, { target: { value: 'Andrea' } });
 
-      // Click filter
+      // Hacer clic en filtros
       const filterButton = screen.getByRole('button', { name: /filtros/i });
       fireEvent.click(filterButton);
 
-      // Click add
+      // Hacer clic en añadir
       const addButton = screen.getByRole('button', { name: /añadir estudiante/i });
       fireEvent.click(addButton);
 
-      // Click export
+      // Hacer clic en exportar
       const exportButton = screen.getByRole('button', { name: /exportar/i });
       fireEvent.click(exportButton);
 
@@ -207,6 +222,7 @@ describe('BarOptions', () => {
   });
 
   describe('Accessibility', () => {
+    // Verifica que los botones tengan etiquetas accesibles
     it('has accessible button labels', () => {
       render(<BarOptions />);
 
@@ -215,6 +231,7 @@ describe('BarOptions', () => {
       expect(screen.getByRole('button', { name: /exportar/i })).toBeInTheDocument();
     });
 
+    // Verifica que el input de búsqueda tenga texto placeholder
     it('search input has placeholder text', () => {
       render(<BarOptions />);
 

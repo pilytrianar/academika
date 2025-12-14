@@ -1,22 +1,15 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import StudentTabs from './StudentTabs';
+import StudentInformationTab from './StudentInformationTab';
 import { StudentDetail } from '@/types/student';
 
-// Mock data
+// Mock data para las historias
 const mockStudent: StudentDetail = {
   id: '1',
   email: 'joan.romero@academika.com',
   profile: {
-    firstName: 'Joan',
-    lastName: 'Romero',
     studentId: '12345',
-    birthDate: '2008-05-15',
     address: 'Av. Calle 127 # 12 - 19, Bogotá',
     phone: '3122334455',
-    course: {
-      name: '7°',
-      section: 'Grado D',
-    },
     guardian: {
       fullName: 'Elon Musk',
       phone: '3145677880',
@@ -30,24 +23,27 @@ const mockStudent: StudentDetail = {
 };
 
 const mockStudent2: StudentDetail = {
-  ...mockStudent,
   id: '2',
   email: 'andrea.triana@academika.com',
   profile: {
-    ...mockStudent.profile,
-    firstName: 'Andrea',
-    lastName: 'Triana',
     studentId: '54321',
-    course: {
-      name: '9°',
-      section: 'Grado A',
+    address: 'Cra. 15 # 93 - 45, Bogotá',
+    phone: '3009876543',
+    guardian: {
+      fullName: 'María Triana',
+      phone: '3201234567',
+      email: 'maria.triana@gmail.com',
     },
   },
+  firstName: 'Andrea',
+  lastName: 'Triana',
+  course: 'Noveno A',
+  status: 'Activo',
 };
 
-const meta: Meta<typeof StudentTabs> = {
-  title: 'Components/Student/StudentTabs',
-  component: StudentTabs,
+const meta: Meta<typeof StudentInformationTab> = {
+  title: 'Components/Student/StudentInformationTab',
+  component: StudentInformationTab,
   tags: ['autodocs'],
   parameters: {
     layout: 'padded',
@@ -60,9 +56,9 @@ const meta: Meta<typeof StudentTabs> = {
 };
 
 export default meta;
-type Story = StoryObj<typeof StudentTabs>;
+type Story = StoryObj<typeof StudentInformationTab>;
 
-// Historia principal
+// Historia principal con datos de ejemplo
 export const Default: Story = {
   args: {
     student: mockStudent,
@@ -76,15 +72,24 @@ export const AlternativeStudent: Story = {
   },
 };
 
-// Vista móvil
+// Con dirección larga
+export const LongAddress: Story = {
+  args: {
+    student: {
+      ...mockStudent,
+      profile: {
+        ...mockStudent.profile,
+        address:
+          'Avenida Carrera 45 # 123 - 456, Apartamento 789, Conjunto Residencial Los Pinos, Bogotá D.C., Colombia',
+      },
+    },
+  },
+};
+
+// En contenedor estrecho (mobile)
 export const Mobile: Story = {
   args: {
     student: mockStudent,
-  },
-  parameters: {
-    viewport: {
-      defaultViewport: 'mobile1',
-    },
   },
   decorators: [
     Story => (
@@ -95,33 +100,14 @@ export const Mobile: Story = {
   ],
 };
 
-// Vista tablet
-export const Tablet: Story = {
-  args: {
-    student: mockStudent,
-  },
-  parameters: {
-    viewport: {
-      defaultViewport: 'tablet',
-    },
-  },
-  decorators: [
-    Story => (
-      <div style={{ maxWidth: '768px' }}>
-        <Story />
-      </div>
-    ),
-  ],
-};
-
-// Vista ancha
+// En contenedor ancho
 export const Wide: Story = {
   args: {
     student: mockStudent,
   },
   decorators: [
     Story => (
-      <div style={{ maxWidth: '1200px' }}>
+      <div style={{ maxWidth: '900px' }}>
         <Story />
       </div>
     ),

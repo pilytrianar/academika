@@ -1,11 +1,7 @@
 'use client';
 
-import { Typography } from '@mui/material';
+import Calendar from '@/components/Calendar';
 
 export default function CalendarioPage() {
-  return (
-    <div>
-      <Typography variant='body1'>Calendario</Typography>
-    </div>
-  );
+  return <Calendar />;
 }
