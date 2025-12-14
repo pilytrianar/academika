@@ -26,8 +26,8 @@ export default function StudentTabs({ student }: StudentTabsProps) {
       <Divider className='my-4' />
 
       {tab === 0 && <StudentInformationTab student={student} />}
-      {tab === 1 && <AcademicReportTab/>}
-      {tab === 2 && <DisciplineNotesTab/>}
+      {tab === 1 && <AcademicReportTab />}
+      {tab === 2 && <DisciplineNotesTab />}
     </Card>
   );
 }

@@ -45,7 +45,7 @@ export default function StudentInfoWrapper() {
 
   return (
     <div className='p-3  min-h-screen'>
-      <StudentHeader/>
+      <StudentHeader />
 
       <div className='max-w-8xl mx-auto grid grid-cols-1 lg:grid-cols-4 gap-8'>
         <div className='space-y-6'>
