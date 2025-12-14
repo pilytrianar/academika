@@ -1,22 +1,28 @@
 'use client';
 
 import { Divider } from '@mui/material';
+import { StudentDetail } from '@/types/student';
 
-export default function StudentInformationTab() {
+export default function StudentInformationTab({ student }: { student: StudentDetail }) {
+  const { profile } = student;
+
   return (
     <div className='space-y-6'>
       {/* Datos personales */}
       <section>
-        <h3 className='text-lg font-semibold text-gray-800 mt-4'>Datos Personales</h3>
-        <div className='grid grid-cols-1 md:grid-cols-2 gap-4 mt-4 ml-3'>
+        <h3 className='text-lg font-semibold'>Datos Personales</h3>
+
+        <div className='grid grid-cols-2 gap-4 mt-4 ml-3'>
           <p>
-            <strong>Fecha de Nacimiento:</strong> <br /> 15 de Mayo, 2008
+            <strong>ID Estudiante:</strong>
+            <br />
+            {profile.studentId}
           </p>
-          <p>
-            <strong>ID de Estudiante:</strong> <br /> 12345
-          </p>
-          <p className='md:col-span-2'>
-            <strong>Dirección:</strong> <br /> Av. Calle 127 # 12 - 19, Bogotá
+
+          <p className='col-span-2'>
+            <strong>Dirección:</strong>
+            <br />
+            {profile.address}
           </p>
         </div>
       </section>
@@ -25,31 +31,46 @@ export default function StudentInformationTab() {
 
       {/* Información de contacto */}
       <section>
-        <h3 className='text-lg font-semibold text-gray-800 mt-4'>Información de Contacto</h3>
-        <div className='grid grid-cols-1 md:grid-cols-2 gap-4 mt-4 ml-3'>
+        <h3 className='text-lg font-semibold'>Información de Contacto</h3>
+
+        <div className='grid grid-cols-2 gap-4 mt-4 ml-3'>
           <p>
-            <strong>Email del Estudiante:</strong> <br /> joan.romero@academika.com
+            <strong>Email:</strong>
+            <br />
+            {student.email}
           </p>
+
           <p>
-            <strong>Teléfono:</strong> <br /> 3122334455
+            <strong>Teléfono:</strong>
+            <br />
+            {profile.phone}
           </p>
         </div>
       </section>
 
       <Divider />
 
-      {/* Padres/Tutores */}
+      {/* Tutor */}
       <section>
-        <h3 className='text-lg font-semibold text-gray-800 mt-4'>Datos de los Padres/Tutores</h3>
-        <div className='grid grid-cols-1 md:grid-cols-2 gap-4 mt-4 ml-3'>
+        <h3 className='text-lg font-semibold'>Padre / Tutor</h3>
+
+        <div className='grid grid-cols-2 gap-4 mt-4 ml-3'>
           <p>
-            <strong>Nombre del Tutor:</strong> <br /> Elon Musk
+            <strong>Nombre:</strong>
+            <br />
+            {profile.guardian.fullName}
           </p>
+
           <p>
-            <strong>Teléfono del Contacto:</strong> <br /> 3145677880
+            <strong>Teléfono:</strong>
+            <br />
+            {profile.guardian.phone}
           </p>
-          <p className='md:col-span-2'>
-            <strong>Email:</strong> <br /> elon.musk@academika.com
+
+          <p className='col-span-2'>
+            <strong>Email:</strong>
+            <br />
+            {profile.guardian.email}
           </p>
         </div>
       </section>

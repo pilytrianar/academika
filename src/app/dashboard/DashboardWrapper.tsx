@@ -7,7 +7,6 @@ import { Box, Container, Typography } from '@mui/material';
 
 export default function DashboardWrapper() {
   const { user } = useAuth();
-
   return (
     <Container maxWidth='xl'>
       <Typography sx={{ fontWeight: 'bold' }} variant='h4'>
