@@ -5,6 +5,7 @@ generator client {
 
 datasource db {
   provider = "mysql"
+  url      = env("DATABASE_URL")
 }
 
 // ==================== ENUMS ====================
@@ -28,59 +29,59 @@ model Role {
 }
 
 model User {
-  id        Int        @id @default(autoincrement()) @db.UnsignedInt
-  email     String     @unique @db.VarChar(255)
-  password  String     @db.VarChar(255)
-  status    UserStatus @default(ACTIVE)
-  roleId    Int        @db.UnsignedInt
-  role      Role       @relation(fields: [roleId], references: [id])
+  id        Int          @id @default(autoincrement()) @db.UnsignedInt
+  email     String       @unique @db.VarChar(255)
+  password  String       @db.VarChar(255)
+  status    UserStatus   @default(ACTIVE)
+  roleId    Int          @db.UnsignedInt
+  role      Role         @relation(fields: [roleId], references: [id])
   profile   UserProfile?
-  createdAt DateTime   @default(now())
-  updatedAt DateTime   @updatedAt
+  createdAt DateTime     @default(now())
+  updatedAt DateTime     @updatedAt
 
   @@index([roleId])
   @@map("users")
 }
 
 model UserProfile {
-  id          Int       @id @default(autoincrement()) @db.UnsignedInt
-  userId      Int       @unique @db.UnsignedInt
-  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
-  firstName   String    @db.VarChar(100)
-  lastName    String    @db.VarChar(100)
-  birthDate   DateTime? @db.Date
-  phone       String?   @db.VarChar(20)
-  address     String?   @db.VarChar(255)
-  avatarUrl   String?   @db.VarChar(500)
-  
+  id        Int       @id @default(autoincrement()) @db.UnsignedInt
+  userId    Int       @unique @db.UnsignedInt
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  firstName String    @db.VarChar(100)
+  lastName  String    @db.VarChar(100)
+  birthDate DateTime? @db.Date
+  phone     String?   @db.VarChar(20)
+  address   String?   @db.VarChar(255)
+  avatarUrl String?   @db.VarChar(500)
+
   // Campos específicos para estudiantes
-  studentId   String?   @unique @db.VarChar(20) // ID único del estudiante (12345, 54321, etc.)
-  courseId    Int?      @db.UnsignedInt
-  course      Course?   @relation(fields: [courseId], references: [id])
-  guardian    Guardian?
-  grades      Grade[]
+  studentId         String?            @unique @db.VarChar(20) // ID único del estudiante (12345, 54321, etc.)
+  courseId          Int?               @db.UnsignedInt
+  course            Course?            @relation(fields: [courseId], references: [id])
+  guardian          Guardian?
+  grades            Grade[]
   disciplinaryNotes DisciplinaryNote[]
-  
+
   // Campos específicos para profesores
-  subjects    SubjectTeacher[]
-  
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
+  subjects SubjectTeacher[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   @@index([courseId])
   @@map("user_profiles")
 }
 
 model Guardian {
-  id              Int         @id @default(autoincrement()) @db.UnsignedInt
-  userProfileId   Int         @unique @db.UnsignedInt
-  userProfile     UserProfile @relation(fields: [userProfileId], references: [id], onDelete: Cascade)
-  fullName        String      @db.VarChar(200)
-  phone           String      @db.VarChar(20)
-  email           String?     @db.VarChar(255)
-  relationship    String?     @db.VarChar(50) // Padre, Madre, Tutor, etc.
-  createdAt       DateTime    @default(now())
-  updatedAt       DateTime    @updatedAt
+  id            Int         @id @default(autoincrement()) @db.UnsignedInt
+  userProfileId Int         @unique @db.UnsignedInt
+  userProfile   UserProfile @relation(fields: [userProfileId], references: [id], onDelete: Cascade)
+  fullName      String      @db.VarChar(200)
+  phone         String      @db.VarChar(20)
+  email         String?     @db.VarChar(255)
+  relationship  String?     @db.VarChar(50) // Padre, Madre, Tutor, etc.
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
 
   @@map("guardians")
 }
@@ -88,14 +89,14 @@ model Guardian {
 // ==================== ACADEMIC ====================
 
 model Course {
-  id          Int           @id @default(autoincrement()) @db.UnsignedInt
-  name        String        @db.VarChar(100) // "Séptimo", "Noveno", "Once"
-  section     String        @db.VarChar(10)  // "A", "B", "C", "D"
-  year        Int           @db.Year
-  students    UserProfile[]
-  subjects    SubjectCourse[]
-  createdAt   DateTime      @default(now())
-  updatedAt   DateTime      @updatedAt
+  id        Int             @id @default(autoincrement()) @db.UnsignedInt
+  name      String          @db.VarChar(100) // "Séptimo", "Noveno", "Once"
+  section   String          @db.VarChar(10) // "A", "B", "C", "D"
+  year      Int             @db.Year
+  students  UserProfile[]
+  subjects  SubjectCourse[]
+  createdAt DateTime        @default(now())
+  updatedAt DateTime        @updatedAt
 
   @@unique([name, section, year])
   @@map("courses")
@@ -114,15 +115,15 @@ model Subject {
 
 // Relación Asignatura-Curso (qué asignaturas se dan en qué cursos)
 model SubjectCourse {
-  id          Int             @id @default(autoincrement()) @db.UnsignedInt
-  subjectId   Int             @db.UnsignedInt
-  subject     Subject         @relation(fields: [subjectId], references: [id], onDelete: Cascade)
-  courseId    Int             @db.UnsignedInt
-  course      Course          @relation(fields: [courseId], references: [id], onDelete: Cascade)
-  teachers    SubjectTeacher[]
-  grades      Grade[]
-  createdAt   DateTime        @default(now())
-  updatedAt   DateTime        @updatedAt
+  id        Int              @id @default(autoincrement()) @db.UnsignedInt
+  subjectId Int              @db.UnsignedInt
+  subject   Subject          @relation(fields: [subjectId], references: [id], onDelete: Cascade)
+  courseId  Int              @db.UnsignedInt
+  course    Course           @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  teachers  SubjectTeacher[]
+  grades    Grade[]
+  createdAt DateTime         @default(now())
+  updatedAt DateTime         @updatedAt
 
   @@unique([subjectId, courseId])
   @@index([courseId])
@@ -197,16 +198,16 @@ model Notification {
 // ==================== CALENDAR (opcional, para futuro) ====================
 
 model CalendarEvent {
-  id          Int      @id @default(autoincrement()) @db.UnsignedInt
-  title       String   @db.VarChar(255)
-  description String?  @db.Text
+  id          Int       @id @default(autoincrement()) @db.UnsignedInt
+  title       String    @db.VarChar(255)
+  description String?   @db.Text
   startDate   DateTime
   endDate     DateTime?
-  allDay      Boolean  @default(false)
-  type        String   @db.VarChar(50) // EXAM, MEETING, HOLIDAY, DEADLINE
-  courseId    Int?     @db.UnsignedInt // null = evento global
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  allDay      Boolean   @default(false)
+  type        String    @db.VarChar(50) // EXAM, MEETING, HOLIDAY, DEADLINE
+  courseId    Int?      @db.UnsignedInt // null = evento global
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
 
   @@index([courseId])
   @@index([startDate])

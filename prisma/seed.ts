@@ -1,3 +1,12 @@
+const RUN_SEED = process.env.RUN_SEED;
+
+if (!RUN_SEED || RUN_SEED !== 'true') {
+  console.log(
+    '⚠️  Saltando el seed de la base de datos. Establece la variable de entorno RUN_SEED=true para ejecutarlo.'
+  );
+  process.exit(0);
+}
+
 import { PrismaClient, UserStatus } from '@/generated/prisma';
 import bcrypt from 'bcrypt';
 
