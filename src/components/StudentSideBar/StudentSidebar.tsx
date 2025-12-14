@@ -44,7 +44,7 @@ export default function StudentSidebar({ student }: StudentSidebarProps) {
         {student.profile.firstName} {student.profile.lastName}
       </h2>
       <p className='text-gray-500 mt-1'>
-        {student.profile.course.name} {student.profile.course.section}
+        {student.profile.course?.name} {student.profile.course?.section}
       </p>
       <p className='text-gray-500 mb-8'>Edad: {age} años</p>
 

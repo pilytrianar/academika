@@ -9,7 +9,12 @@ export interface StudentDetail {
     birthDate: string;
     phone: string;
     address: string;
-
+    firstName?: string;
+    lastName?: string;
+    course?: {
+      name: string;
+      section: string;
+    };
     guardian: {
       fullName: string;
       phone: string;
