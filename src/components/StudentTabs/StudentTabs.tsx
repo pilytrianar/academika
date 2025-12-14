@@ -4,7 +4,7 @@ import { Card, Tabs, Tab, Divider } from '@mui/material';
 import { useState } from 'react';
 
 import StudentInformationTab from '../StudentInformationTab';
-import AcademicReportTab from '../academicReportTab/AcademicReportTab';
+import AcademicReportTab from '../AcademicReportTab/AcademicReportTab';
 import { StudentDetail } from '@/types/student';
 import DisciplineNotesTab from '../DisciplineNotesTab/DisciplineNotesTab';
 
